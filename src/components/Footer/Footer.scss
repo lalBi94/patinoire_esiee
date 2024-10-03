@@ -1,0 +1,46 @@
+@import "../../index.scss";
+
+#footer-container {
+    margin-top: auto;
+    background: $ciel;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 10px;
+    box-sizing: border-box;
+
+    a {
+        text-decoration: none;
+    }
+
+    .footer-cat {
+        .footer-info-title {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .footer-data-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+
+            img {
+                width: 100px;
+            }
+        }
+
+        .footer-data {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .footer-data-content {
+                gap: 10px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+    }
+}

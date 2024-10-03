@@ -1,0 +1,63 @@
+@import "../../index.scss";
+
+#nav-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+    #nav-img-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            height: 70px;
+        }
+    }
+
+    #nav-links-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        gap: 20px;
+
+        .nav-links-content {
+            border-bottom: 1px solid transparent;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+
+            .nav-links {
+                text-decoration: none;
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+
+                .nav-links-text {
+                    font-size: 1em;
+                }
+
+                path {
+                    color: $black;
+                }
+            }
+
+            &:hover {
+                border-bottom: 1px solid $red;
+
+                .nav-links-text {
+                    color: $red;
+                }
+
+                path {
+                    color: $red;
+                }
+            }
+        }
+    }
+}

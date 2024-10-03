@@ -1,2 +1,14 @@
-$black: #111;
+$black: #2e2e2e;
 $white: #fff;
+$ciel: #b7deed;
+$red: #4b0505;
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+}

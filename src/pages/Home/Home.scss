@@ -1,0 +1,75 @@
+#home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    text-align: center;
+
+    #bg {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        opacity: 80%;
+        height: 600px;
+        background: url("/bg.webp") no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+
+        img {
+            cursor: pointer;
+            &::selection {
+                background: transparent;
+            }
+
+            height: 350px;
+            animation: fadeIn 1s ease-in forwards,
+                bloup 0.4s ease-in-out 1.2s forwards;
+        }
+    }
+
+    #home-text-corp {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-evenly;
+
+        .home-text-inside {
+            width: 400px;
+
+            .home-text-inside-text {
+                text-wrap: pretty;
+            }
+
+            .home-text-inside-title {
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bloup {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.04);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
