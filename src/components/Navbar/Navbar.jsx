@@ -52,7 +52,7 @@ export default function Navbar() {
                 <Box className="nav-links-content">
                     <Link
                         target="_blank"
-                        to="https://instagram.com"
+                        to="https://www.instagram.com/club_patinoire_en_cours?igsh=MWxwb25qZjV5cm1pdg=="
                         className="nav-links"
                     >
                         <InstagramIcon className="nav-links-icons" />
