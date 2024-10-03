@@ -31,7 +31,7 @@ export default function Navbar() {
                         <PersonIcon className="nav-links-icons" />
 
                         <Typography className="nav-links-text">
-                            Cotiser
+                            Cotiser pour le club
                         </Typography>
                     </Link>
                 </Box>
