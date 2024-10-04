@@ -4,7 +4,19 @@ Ce front est destiné au club de patinage de l'ESIEE Paris. À l'avenir, il faud
 
 ### Comment le démarrer en local (pour test)
 
-Lancer cette commande :
+Pour installer les dependences necessaires, faire :
+
+```bash
+pnpm install
+```
+
+ou
+
+```bash
+npm install
+```
+
+Pour host le projet, lancer cette commande :
 
 ```bash
 pnpm run dev
