@@ -56,28 +56,6 @@ export default function Footer() {
                     </Link>
                 </Stack>
             </Stack>
-
-            {/* <Divider className="hide-on-resp" orientation="vertical" />
-
-            <Stack className="footer-cat">
-                <Typography className="footer-info-title">
-                    <u>Liens externes</u>
-                </Typography>
-
-                <Stack className="footer-data-row">
-                    <Tooltip title="Bureau des sports d'ESIEE Paris">
-                        <Link className="footer-data-content">
-                            <img src="/bds.png" alt="" />
-                        </Link>
-                    </Tooltip>
-
-                    <Tooltip title="ESIEE Paris">
-                        <Link className="footer-data-content">
-                            <img src="/esiee.jpg" alt="" />
-                        </Link>
-                    </Tooltip>
-                </Stack>
-            </Stack> */}
         </Stack>
     );
 }

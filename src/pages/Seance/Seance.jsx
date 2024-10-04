@@ -13,7 +13,7 @@ import {
 } from "@mui/joy";
 import Layout from "../../layout/Layout";
 import { Link } from "react-router-dom";
-
+import Lydia from "../../assets/images/lydia-logo.webp";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -185,8 +185,18 @@ export default function Seance() {
                             avant de soumettre.
                         </Typography>
 
-                        <Button type="submit">
-                            <img src="/lydia-logo.webp" alt="" />
+                        <Button
+                            disabled={
+                                !(
+                                    identity.length > 0 &&
+                                    email.length > 0 &&
+                                    tel.length > 0 &&
+                                    cotisantOf.length > 0
+                                )
+                            }
+                            type="submit"
+                        >
+                            <img src={Lydia} alt="" />
                             <Typography>
                                 Valider votre inscription ici
                             </Typography>

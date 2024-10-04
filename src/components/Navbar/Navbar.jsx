@@ -15,6 +15,7 @@ import DriveFileRenameOutlineRoundedIcon from "@mui/icons-material/DriveFileRena
 import HomeIcon from "@mui/icons-material/Home";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { useState, useEffect } from "react";
+import Logo from "../../assets/images/favicon.png";
 
 export default function Navbar() {
     const [inBurger, setInBurger] = useState(false);
@@ -92,7 +93,7 @@ export default function Navbar() {
 
             <Box id="nav-img-container">
                 <Link to="/accueil">
-                    <img src="/favicon.png" alt="" />
+                    <img src={Logo} alt="" />
                 </Link>
                 <MenuOpenIcon
                     onClick={handleBurgerMenu}

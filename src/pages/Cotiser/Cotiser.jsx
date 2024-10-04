@@ -14,6 +14,7 @@ import "./Cotiser.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Lydia from "../../assets/images/lydia-logo.webp";
 
 export default function Cotiser() {
     const [identity, setIdentity] = useState("");
@@ -179,7 +180,7 @@ export default function Cotiser() {
                                 )
                             }
                         >
-                            <img src="/lydia-logo.webp" alt="" />
+                            <img src={Lydia} alt="" />
                             <Typography>Valider votre adhésion ici</Typography>
                         </Button>
                     </Stack>
