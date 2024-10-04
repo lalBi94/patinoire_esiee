@@ -26,6 +26,14 @@ body {
     min-height: 100vh;
 }
 
+body.loading * {
+    transition: none !important;
+}
+
+body.loaded * {
+    transition: all 0.3s ease-in-out;
+}
+
 body::before {
     content: "";
     position: fixed;

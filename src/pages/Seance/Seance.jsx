@@ -18,6 +18,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { fr } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useState } from "react";
 
 const locales = {
     fr: fr,
@@ -52,6 +53,38 @@ const twoMonthsFromNow = new Date(
 );
 
 export default function Seance() {
+    const [identity, setIdentity] = useState("");
+    const [email, setEmail] = useState("");
+    const [tel, setTel] = useState("");
+    const [cotisantOf, setCotisantOf] = useState("CLUB");
+
+    const handleIdentity = (e) => {
+        setIdentity(e.target.value);
+    };
+
+    const handleEmail = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const handleTel = (e) => {
+        setTel(e.target.value);
+    };
+
+    const handleCotisantOf = (e) => {
+        setCotisantOf(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        console.log({
+            identity,
+            cotisantOf,
+            email,
+            tel,
+        });
+    };
+
     return (
         <Layout>
             <Stack id="seance-container">
@@ -61,18 +94,24 @@ export default function Seance() {
                     </Typography>
                 </Box>
 
-                <form id="seance-form">
+                <form id="seance-form" onSubmit={handleSubmit}>
                     <FormControl className="seance-form-cat">
                         <FormLabel>Cotisant du</FormLabel>
+
                         <Typography color="danger">
                             Etre cotisant du club ou du BDS est obligatoire !{" "}
                             <Link to="/cotiser">
                                 (Cliquez ici si ce n&apos;est pas fait)
                             </Link>
                         </Typography>
-                        <RadioGroup name="cotisant" defaultValue="club">
+
+                        <RadioGroup
+                            onChange={handleCotisantOf}
+                            name="cotisant"
+                            defaultValue="CLUB"
+                        >
                             <Radio required value="BDS" label="BDS" />
-                            <Radio required value="club" label="Club" />
+                            <Radio required value="CLUB" label="Club" />
                         </RadioGroup>
                     </FormControl>
 
@@ -82,6 +121,8 @@ export default function Seance() {
                         <FormControl>
                             <FormLabel>Nom et Prenom</FormLabel>
                             <Input
+                                onChange={handleIdentity}
+                                value={identity}
                                 type="text"
                                 placeholder="Ex: Lorine Schild"
                             />
@@ -90,6 +131,8 @@ export default function Seance() {
                         <FormControl>
                             <FormLabel>E-mail</FormLabel>
                             <Input
+                                onChange={handleEmail}
+                                value={email}
                                 type="email"
                                 placeholder="Ex: mail@edu.esiee.fr"
                             />
@@ -98,6 +141,8 @@ export default function Seance() {
                         <FormControl>
                             <FormLabel>N° du téléphone</FormLabel>
                             <Input
+                                onChange={handleTel}
+                                value={tel}
                                 type="tel"
                                 placeholder="Ex: 07 31 55 67 69"
                             />
@@ -140,7 +185,7 @@ export default function Seance() {
                             avant de soumettre.
                         </Typography>
 
-                        <Button>
+                        <Button type="submit">
                             <img src="/lydia-logo.webp" alt="" />
                             <Typography>
                                 Valider votre inscription ici
