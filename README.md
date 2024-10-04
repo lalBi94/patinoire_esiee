@@ -38,6 +38,8 @@ pnpm run build
 npm run build
 ```
 
+dans un terminal.
+
 ## Contribution externe
 
 Veuillez me contacter sur le mail pro.boudjemline@gmail.com pour toutes contributions.
