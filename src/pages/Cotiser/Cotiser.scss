@@ -1,0 +1,59 @@
+@import "../../index.scss";
+
+a {
+    color: $red;
+}
+
+#cotiser-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+
+    #cotiser-title {
+        .cotisation-aventage {
+            path {
+                color: $green;
+            }
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            gap: 5px;
+        }
+    }
+
+    #cotiser-form {
+        padding: 15px;
+        width: 700px;
+        border-radius: 5px;
+        border: 1px solid $light_black;
+        background: $white;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        @media (max-width: $resp) {
+            width: 90%;
+        }
+
+        .cotiser-form-cat {
+            display: flex;
+            gap: 5px;
+
+            button {
+                display: flex;
+                gap: 12px;
+
+                p {
+                    color: $white;
+                }
+
+                img {
+                    width: 30px;
+                }
+            }
+        }
+    }
+}

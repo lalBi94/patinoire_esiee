@@ -2,13 +2,42 @@ $black: #2e2e2e;
 $white: #fff;
 $ciel: #b7deed;
 $red: #4b0505;
+$light_black: #c7c7c7;
+$green: rgb(0, 94, 0);
+$resp: 800px;
 
 * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+
+    ::selection {
+        background: $ciel;
+    }
+}
+
+.hide-on-resp {
+    @media (max-width: $resp) {
+        display: none;
+    }
 }
 
 body {
     min-height: 100vh;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/giphy.gif");
+    background-size: 300px; /* Ajuste la taille du GIF selon tes besoins */
+    background-repeat: repeat; /* Répète le GIF */
+    background-position: center;
+    opacity: 0.3; /* Ajuste l'opacité ici */
+    z-index: -1; /* Met l'arrière-plan derrière tout le contenu */
+    pointer-events: none; /* Pour éviter que l'élément ne bloque les interactions */
 }

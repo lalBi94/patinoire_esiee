@@ -1,9 +1,11 @@
+@import "../../index.scss";
+
 #home-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 30px;
     text-align: center;
 
     #bg {
@@ -28,6 +30,10 @@
             height: 350px;
             animation: fadeIn 1s ease-in forwards,
                 bloup 0.4s ease-in-out 1.2s forwards;
+
+            @media (max-width: $resp) {
+                height: 250px;
+            }
         }
     }
 
@@ -35,11 +41,19 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        width: 100%;
-        justify-content: space-evenly;
+        justify-content: center;
+        gap: 20px;
 
         .home-text-inside {
             width: 400px;
+            border: 1px solid $light_black;
+            padding: 20px;
+            border-radius: 5px;
+            background: $white;
+
+            @media (max-width: $resp) {
+                width: 90%;
+            }
 
             .home-text-inside-text {
                 text-wrap: pretty;

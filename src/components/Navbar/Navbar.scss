@@ -1,5 +1,46 @@
 @import "../../index.scss";
 
+.nav-links-content {
+    border-bottom: 1px solid transparent;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    .nav-links {
+        text-decoration: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        font-size: 19px;
+
+        .nav-links-text {
+            font-size: 1em;
+        }
+
+        path {
+            color: $black;
+        }
+    }
+
+    &:hover {
+        .nav-links-text {
+            color: $red;
+        }
+
+        path {
+            color: $red;
+        }
+    }
+}
+
+#burger {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 #nav-container {
     display: flex;
     flex-direction: row;
@@ -10,11 +51,25 @@
     #nav-img-container {
         display: flex;
         flex-direction: row;
+
         justify-content: center;
         align-items: center;
 
+        @media (max-width: $resp) {
+            gap: 20px;
+        }
+
+        .show-burger {
+            display: none;
+
+            @media (max-width: $resp) {
+                display: block;
+                cursor: pointer;
+            }
+        }
+
         img {
-            height: 70px;
+            height: 100px;
         }
     }
 
@@ -24,40 +79,10 @@
         justify-content: center;
         align-items: center;
 
-        gap: 20px;
-
-        .nav-links-content {
-            border-bottom: 1px solid transparent;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-
-            .nav-links {
-                text-decoration: none;
-                display: flex;
-                flex-direction: row;
-                gap: 5px;
-
-                .nav-links-text {
-                    font-size: 1em;
-                }
-
-                path {
-                    color: $black;
-                }
-            }
-
-            &:hover {
-                border-bottom: 1px solid $red;
-
-                .nav-links-text {
-                    color: $red;
-                }
-
-                path {
-                    color: $red;
-                }
-            }
+        @media (max-width: $resp) {
+            display: none;
         }
+
+        gap: 20px;
     }
 }

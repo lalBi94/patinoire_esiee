@@ -8,24 +8,6 @@ export default function Footer() {
         <Stack id="footer-container">
             <Stack className="footer-cat">
                 <Typography className="footer-info-title">
-                    <u>Mentions legales</u>
-                </Typography>
-
-                <Stack className="footer-data">
-                    <Link className="footer-data-content">
-                        <Typography>C.G.U</Typography>
-                    </Link>
-
-                    <Link className="footer-data-content">
-                        <Typography>Politique de Cookies</Typography>
-                    </Link>
-                </Stack>
-            </Stack>
-
-            <Divider orientation="vertical" />
-
-            <Stack className="footer-cat">
-                <Typography className="footer-info-title">
                     <u>Contacts</u>
                 </Typography>
 
@@ -53,7 +35,29 @@ export default function Footer() {
                 </Stack>
             </Stack>
 
-            <Divider orientation="vertical" />
+            <Divider className="hide-on-resp" orientation="vertical" />
+
+            <Stack className="footer-cat">
+                <Typography className="footer-info-title">
+                    <u>Mentions legales</u>
+                </Typography>
+
+                <Stack className="footer-data">
+                    <Link className="footer-data-content">
+                        <Typography>C.G.U</Typography>
+                    </Link>
+
+                    <Link className="footer-data-content">
+                        <Typography>Politique de Cookies</Typography>
+                    </Link>
+
+                    <Link className="footer-data-content">
+                        <Typography>Regles du club</Typography>
+                    </Link>
+                </Stack>
+            </Stack>
+
+            {/* <Divider className="hide-on-resp" orientation="vertical" />
 
             <Stack className="footer-cat">
                 <Typography className="footer-info-title">
@@ -73,7 +77,7 @@ export default function Footer() {
                         </Link>
                     </Tooltip>
                 </Stack>
-            </Stack>
+            </Stack> */}
         </Stack>
     );
 }

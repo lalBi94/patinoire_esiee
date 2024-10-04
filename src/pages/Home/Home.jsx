@@ -1,11 +1,18 @@
 import { Stack, Typography, Box } from "@mui/joy";
 import Layout from "../../layout/Layout";
+import { Link } from "react-router-dom";
 import "./Home.scss";
 
 export default function Home() {
     return (
         <Layout>
             <Stack id="home-container">
+                <Stack id="bg">
+                    <Link to="cotiser">
+                        <img src="/favicon.png" alt="" />
+                    </Link>
+                </Stack>
+
                 <Typography level="h3">
                     Bienvenue <br /> au{" "}
                     <span
@@ -15,14 +22,10 @@ export default function Home() {
                             padding: "2px",
                         }}
                     >
-                        club de patinoire
+                        Club de Patinoire
                     </span>{" "}
-                    d&apos;ESIEE Paris
+                    d&apos;ESIEE Paris !
                 </Typography>
-
-                <Stack id="bg">
-                    <img src="/favicon.png" alt="" />
-                </Stack>
 
                 <Stack id="home-text-corp">
                     <Box className="home-text-inside">
@@ -33,7 +36,7 @@ export default function Home() {
                             Qui sommes-nous ?
                         </Typography>
 
-                        <Typography className="home-text-inside-text" level="p">
+                        <Typography className="home-text-inside-text">
                             Diam adipiscing accusam option laoreet sea dolore
                             sed takimata minim vel stet blandit labore illum.
                             Takimata et eos dolor aliquip labore consetetur eos
@@ -56,7 +59,7 @@ export default function Home() {
                             Comment nous rejoindre ?
                         </Typography>
 
-                        <Typography className="home-text-inside-text" level="p">
+                        <Typography className="home-text-inside-text">
                             Labore molestie feugait. Et invidunt ea gubergren
                             dolore dolore magna lobortis aliquyam vero eos velit
                             sed ea gubergren at commodo erat. Wisi diam magna
@@ -77,7 +80,7 @@ export default function Home() {
                             Je suis cotisant
                         </Typography>
 
-                        <Typography className="home-text-inside-text" level="p">
+                        <Typography className="home-text-inside-text">
                             Kasd magna dolore. Eos at et consectetuer justo
                             dolore duo odio in liber sanctus sea. Elitr
                             consetetur vulputate eirmod lorem vel amet magna
@@ -100,7 +103,7 @@ export default function Home() {
                             Equipements
                         </Typography>
 
-                        <Typography className="home-text-inside-text" level="p">
+                        <Typography className="home-text-inside-text">
                             Labore ut sanctus sea sed eum delenit tincidunt.
                             Accusam diam lorem magna sed ipsum aliquyam dolor
                             sit eos eum et clita vel. Justo vel labore nonummy

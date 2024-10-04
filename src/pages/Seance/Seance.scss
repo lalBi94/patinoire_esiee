@@ -1,0 +1,47 @@
+@import "../../index.scss";
+@import "../../index.scss";
+
+a {
+    color: $red;
+}
+
+#seance-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+
+    #seance-form {
+        padding: 15px;
+        width: 700px;
+        border-radius: 5px;
+        border: 1px solid $light_black;
+        background: $white;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        @media (max-width: $resp) {
+            width: 90%;
+        }
+
+        .seance-form-cat {
+            display: flex;
+            gap: 5px;
+
+            button {
+                display: flex;
+                gap: 12px;
+
+                p {
+                    color: $white;
+                }
+
+                img {
+                    width: 30px;
+                }
+            }
+        }
+    }
+}

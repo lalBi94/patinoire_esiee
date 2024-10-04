@@ -5,9 +5,11 @@
     background: $ciel;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-evenly;
     padding: 10px;
     box-sizing: border-box;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.8);
 
     a {
         text-decoration: none;
