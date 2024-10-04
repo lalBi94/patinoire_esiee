@@ -4,39 +4,35 @@ Ce front est destiné au club de patinage de l'ESIEE Paris. À l'avenir, il faud
 
 ### Comment le démarrer en local (pour test)
 
-Pour installer les dependences necessaires, faire :
+Pour installer les dependences necessaires, faire une des commandes ci-dessous :
 
 ```bash
 pnpm install
 ```
 
-ou
-
 ```bash
 npm install
 ```
 
-Pour host le projet, lancer cette commande :
+Pour host le projet, lancer une des deux commandes ci-dessous :
 
 ```bash
 pnpm run dev
 ```
 
-ou
-
 ```bash
 npm run dev
 ```
 
-dans un terminal utilisant l'un des deux gestionnaires cités ci-dessus.
+dans un terminal.
 
 ### Comment construire le projet pour un déploiement
+
+Pour build un projet afin de l'heberger, faire une des deux commandes ci-dessous :
 
 ```bash
 pnpm run build
 ```
-
-ou
 
 ```bash
 npm run build
