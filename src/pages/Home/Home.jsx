@@ -2,6 +2,7 @@ import { Stack, Typography, Box } from "@mui/joy";
 import Layout from "../../layout/Layout";
 import { Link } from "react-router-dom";
 import "./Home.scss";
+import Logo from "../../assets/images/favicon.png";
 
 export default function Home() {
     return (
@@ -9,7 +10,7 @@ export default function Home() {
             <Stack id="home-container">
                 <Stack id="bg">
                     <Link to="cotiser">
-                        <img src="/favicon.png" alt="" />
+                        <img src={Logo} alt="Logo de la patinoire" />
                     </Link>
                 </Stack>
 
