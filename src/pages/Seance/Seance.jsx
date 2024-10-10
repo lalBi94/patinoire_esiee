@@ -18,7 +18,8 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { fr } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const locales = {
     fr: fr,
@@ -29,7 +30,6 @@ const messages = {
     previous: "Préc.", // ou 'Avant'
     next: "Suiv.", // ou 'Après'
     month: "Mois",
-    week: "Semaine",
     day: "Jour",
     date: "Date",
     time: "Heure",
@@ -45,18 +45,56 @@ const localizer = dateFnsLocalizer({
     locales,
 });
 
-const today = new Date();
-const twoMonthsFromNow = new Date(
-    today.getFullYear(),
-    today.getMonth() + 2,
-    today.getDate()
-);
-
 export default function Seance() {
     const [identity, setIdentity] = useState("");
     const [email, setEmail] = useState("");
     const [tel, setTel] = useState("");
     const [cotisantOf, setCotisantOf] = useState("CLUB");
+    const [seances, setSeances] = useState([]);
+
+    const [dateChooseTimestamp, setDateChooseTimestamp] = useState(null);
+    const [dateChoose, setDateChoose] = useState("");
+
+    const saveDate = (date) => {
+        setDateChooseTimestamp(date);
+        setDateChoose(format(date, "EEEE dd MMMM yyyy", { locale: fr }));
+        console.log(format(date, "EEEE dd MMMM yyyy", { locale: fr }));
+    };
+
+    const getSeance = async () => {
+        const req = await axios.get("http://localhost:5002/calendar");
+
+        const data = req.data.data.map((e) => ({
+            title: (
+                <Stack className="seance-card">
+                    <Typography>
+                        <b>Places: {e.places}</b>
+                    </Typography>
+
+                    <Button
+                        onClick={() => {
+                            saveDate(e.date);
+                        }}
+                    >
+                        Choisir
+                    </Button>
+                </Stack>
+            ),
+            start: new Date(e.date),
+            end: new Date(e.date),
+            allDay: true,
+        }));
+
+        console.log(data);
+
+        return data;
+    };
+
+    useEffect(() => {
+        getSeance().then((res) => {
+            setSeances(res);
+        });
+    }, []);
 
     const handleIdentity = (e) => {
         setIdentity(e.target.value);
@@ -82,6 +120,7 @@ export default function Seance() {
             cotisantOf,
             email,
             tel,
+            timestamp: new Date(dateChooseTimestamp),
         });
     };
 
@@ -156,14 +195,26 @@ export default function Seance() {
 
                         <Calendar
                             localizer={localizer}
-                            defaultView="week"
+                            defaultView="month"
                             culture="fr"
                             style={{ height: "500px" }}
-                            views={["month", "week"]}
+                            views={["month"]}
                             messages={messages}
-                            min={today} // Début aujourd'hui
-                            max={twoMonthsFromNow} // Fin dans 2 mois
+                            events={seances}
                         />
+
+                        <Typography level="h3">
+                            <b>
+                                <u>
+                                    Réservé pour le{" "}
+                                    {dateChoose.length > 0 ? (
+                                        dateChoose
+                                    ) : (
+                                        <span style={{ color: "red" }}>?</span>
+                                    )}
+                                </u>
+                            </b>
+                        </Typography>
                     </FormControl>
 
                     <Divider />
@@ -191,7 +242,9 @@ export default function Seance() {
                                     identity.length > 0 &&
                                     email.length > 0 &&
                                     tel.length > 0 &&
-                                    cotisantOf.length > 0
+                                    cotisantOf.length > 0 &&
+                                    dateChoose.length > 0 &&
+                                    dateChooseTimestamp
                                 )
                             }
                             type="submit"

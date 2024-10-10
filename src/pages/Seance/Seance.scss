@@ -12,6 +12,10 @@ a {
     gap: 20px;
     align-items: center;
 
+    .rbc-event {
+        background: $ciel;
+    }
+
     #seance-form {
         padding: 15px;
         width: 700px;
