@@ -1,0 +1,88 @@
+@import "../../index.scss";
+
+#admin-lang {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    #admin-title {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 25px;
+    }
+
+    .section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 250px;
+        font-family: Arial, Helvetica, sans-serif;
+        border: 1px solid $light_black;
+        padding: 15px;
+        border-radius: 5px;
+
+        .section-in-section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .section-in-section-ipt {
+            }
+
+            .section-in-section-btn {
+            }
+        }
+    }
+
+    #list-sceance {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .list-sceance-box {
+            border: 1px solid $black;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid $light_black;
+            width: 220px;
+            height: 150px;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-family: Arial, Helvetica, sans-serif;
+
+            .list-sceance-box-participants {
+                .list-sceance-box-participant {
+                    font-weight: bold;
+                    font-size: 12px;
+                    cursor: pointer;
+                    list-style-type: none;
+
+                    &:hover {
+                        transform: scale(1.02);
+                        transition: 0.5s;
+                    }
+                }
+            }
+
+            .list-sceance-box-date {
+                text-align: center;
+            }
+
+            .list-sceance-box-id {
+                position: absolute;
+                background: $ciel;
+                padding: 3px;
+                border-bottom-right-radius: 10px;
+                top: 0;
+                left: 0;
+            }
+
+            .list-sceance-box-places {
+                font-size: 14px;
+            }
+        }
+    }
+}

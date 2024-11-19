@@ -1,54 +1,55 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs/promises");
-const moment = require("moment");
-const xlsx = require("xlsx");
 const CalendarPieceValidator = require("../class/CalendarPieceValidator");
+const multer = require("multer");
+const upload = multer();
+const express_rateL = require("express-rate-limit");
+const SQLLiteInteractor = require("../class/SQLLiteInteractor");
+const sli_connect = new SQLLiteInteractor("./data/p_e_b.db");
 
-const getJSONFromExcel = async () => {
+const limiter = express_rateL({
+    windowMs: 30 * 60 * 1000,
+    max: 1,
+    message: "Votre appareil a deja reserve cette sceance.",
+});
+
+//router.use("/take", limiter);
+router.post("/take", upload.none(), async (req, res) => {
     try {
-        const buffer = await fs.readFile("./data/sceances.xlsx");
-        const workBook = xlsx.read(buffer, { type: "buffer" });
+        const { identity, cotisantOf, tel, email, sceance_id } = req.body;
 
-        const sheetName = workBook.SheetNames[0];
-        const worksheet = workBook.Sheets[sheetName];
+        await sli_connect.decrementPlace(sceance_id);
+        await sli_connect.addParticipant(identity, email, tel, sceance_id);
 
-        const data = xlsx.utils.sheet_to_json(worksheet, {
-            raw: false,
-        });
-
-        const combo = [];
-
-        for (let i = 0; i < data.length; ++i) {
-            const formattedDate = new Date(data[i].date);
-
-            if (isNaN(formattedDate)) {
-                continue;
-            }
-
-            const check = new CalendarPieceValidator(
-                formattedDate,
-                data[i].places
-            );
-
-            combo.push(await check.getObject());
-        }
-
-        console.log(combo);
-        return combo;
-    } catch (error) {
-        console.error("Erreur lors de la conversion du fichier Excel :", error);
+        console.log(identity, cotisantOf, tel, email, sceance_id);
+        res.json({ error: null, data: null });
+    } catch (err) {
+        console.error(err);
+        res.json({ error: "Impossible de reserver !", data: null });
     }
-};
+});
+
+router.post("/addSceance", upload.none(), async (req, res) => {
+    try {
+        const { date, places } = req.body;
+
+        await sli_connect.addSession(date, places);
+
+        res.json({ error: null, data: null });
+    } catch (err) {
+        console.error(err);
+        res.json({ error: "Impossible de creer une sceance !", data: null });
+    }
+});
 
 router.get("/", async (req, res) => {
     try {
-        const data = await getJSONFromExcel();
-
-        res.json({ error: null, data: data });
+        const data = await sli_connect.getAllSessions();
+        console.log(data);
+        res.json({ error: null, data });
     } catch (err) {
         console.error(err);
-        res.json({ error: true, data: null });
+        res.json({ error: "Une erreur est survenue !", data: null });
     }
 });
 

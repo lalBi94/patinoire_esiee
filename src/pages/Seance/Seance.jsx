@@ -51,6 +51,7 @@ export default function Seance() {
     const [tel, setTel] = useState("");
     const [cotisantOf, setCotisantOf] = useState("CLUB");
     const [seances, setSeances] = useState([]);
+    const [idChoosen, setIdChoosen] = useState(null);
 
     const [dateChooseTimestamp, setDateChooseTimestamp] = useState(null);
     const [dateChoose, setDateChoose] = useState("");
@@ -64,6 +65,8 @@ export default function Seance() {
     const getSeance = async () => {
         const req = await axios.get("http://localhost:5002/calendar");
 
+        console.log(req.data)
+
         const data = req.data.data.map((e) => ({
             title: (
                 <Stack className="seance-card">
@@ -73,6 +76,7 @@ export default function Seance() {
 
                     <Button
                         onClick={() => {
+                            setIdChoosen(e.id);
                             saveDate(e.date);
                         }}
                     >
@@ -115,13 +119,24 @@ export default function Seance() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log({
-            identity,
-            cotisantOf,
-            email,
-            tel,
-            timestamp: new Date(dateChooseTimestamp),
-        });
+        const formData = new FormData();
+        formData.append("identity", identity);
+        formData.append("cotisantOf", cotisantOf);
+        formData.append("email", email);
+        formData.append("tel", tel);
+        formData.append("sceance_id", idChoosen);
+
+        axios.post("http://localhost:5002/calendar/take", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: formData,
+        }).then((res) => {
+            if(!res.data.error) {
+                alert("Sceance reserver, vous serez bientot contacter !");
+                window.location.reload();
+            }
+        })
     };
 
     return (
