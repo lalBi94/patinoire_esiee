@@ -2,6 +2,16 @@
 
 Ce front est destiné au club de patinage de l'ESIEE Paris. À l'avenir, il faudra repasser sur le projet pour bien structurer et orchestrer le code.
 
+## RESTE A FAIRE AVANT LANCEMENT
+
+-   Annuler une reservation
+-   supprimer
+-   Faire des composants
+-   Update une sceance
+-   Supprimer une sceance
+-   Envoyer les data du form de cotisation
+-   Redaction cgu, cookie etc...
+
 ## Comment le démarrer en local (pour test)
 
 Pour installer les dependences necessaires, faire une des commandes ci-dessous :

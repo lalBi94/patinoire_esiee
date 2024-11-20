@@ -38,17 +38,14 @@ export default function Home() {
                         </Typography>
 
                         <Typography className="home-text-inside-text">
-                            Diam adipiscing accusam option laoreet sea dolore
-                            sed takimata minim vel stet blandit labore illum.
-                            Takimata et eos dolor aliquip labore consetetur eos
-                            dolore duo ut stet. Consetetur eu eu nostrud dolor
-                            in in et. Dolores nonumy duo consetetur laoreet ut
-                            elitr ipsum consetetur et. Kasd vel vel lorem
-                            takimata eu accumsan. Et ipsum et kasd et amet et
-                            ipsum dolore consectetuer nisl iriure. Facer duis
-                            takimata. Labore amet dolore dignissim magna vel
-                            vero id dolore magna. Ea accumsan eirmod vel stet
-                            diam illum dignissim amet.
+                            Dans l&apos;organisation du club, il y a 8 personnes
+                            : Jean, Maxence, Lilian, Benoît, Guillaume, Marie,
+                            Mathieu et Antoine. Jean et Benoît ont tous les deux
+                            suivi des cours de patinage et pourront donc
+                            particulièrement bien t&apos;accompagner. Jean a
+                            notamment pratiqué le freestyle en compétition
+                            tandis que Benoît s&apos;est concentré sur le
+                            patinage de vitesse.
                         </Typography>
                     </Box>
 
@@ -57,19 +54,13 @@ export default function Home() {
                             className="home-text-inside-title"
                             level="h4"
                         >
-                            Comment nous rejoindre ?
+                            Pourquoi cotiser au club de patinoire ?
                         </Typography>
 
                         <Typography className="home-text-inside-text">
-                            Labore molestie feugait. Et invidunt ea gubergren
-                            dolore dolore magna lobortis aliquyam vero eos velit
-                            sed ea gubergren at commodo erat. Wisi diam magna
-                            aliquyam duis doming stet ea tempor euismod sit et
-                            aliquip. Minim stet dolore invidunt in invidunt
-                            dolores sed ut et rebum ipsum nibh velit luptatum.
-                            Amet exerci lorem diam voluptua volutpat justo
-                            nonumy ad labore assum dolores sadipscing. Dolores
-                            sed invidunt suscipit commodo dolor.
+                            Cotiser au club, c&apos;est profiter de séances à
+                            tarif réduit ! Les séances te coûteront 8.75€ au
+                            lieu de 9.75€.
                         </Typography>
                     </Box>
 
@@ -78,21 +69,17 @@ export default function Home() {
                             className="home-text-inside-title"
                             level="h4"
                         >
-                            Je suis cotisant
+                            Quels sont les prérequis pour participer à une
+                            séance ?
                         </Typography>
 
                         <Typography className="home-text-inside-text">
-                            Kasd magna dolore. Eos at et consectetuer justo
-                            dolore duo odio in liber sanctus sea. Elitr
-                            consetetur vulputate eirmod lorem vel amet magna
-                            lorem odio vero nonummy accusam sed diam molestie.
-                            Consequat ea ea zzril. Dolor iriure magna ea stet
-                            ad. Et facilisis nihil at rebum nisl te sea.
-                            Takimata lorem diam duis duo in elitr. Ipsum lorem
-                            dolor amet et no stet autem iriure aliquyam ut ipsum
-                            vero iusto et duo consetetur lobortis elitr. Liber
-                            hendrerit esse dolores facilisis at facer doming
-                            eirmod et facilisis.
+                            Il te faut soit récupérer la vignette sport
+                            (gratuite) auprès de Stéphane Gérard, soit être
+                            cotisant du club. Avant d&apos;entrer dans la
+                            patinoire, nous vérifierons que tu remplis
+                            l&apos;une de ces deux conditions (c’est important
+                            pour que tu sois couvert médicalement).
                         </Typography>
                     </Box>
 
@@ -105,13 +92,8 @@ export default function Home() {
                         </Typography>
 
                         <Typography className="home-text-inside-text">
-                            Labore ut sanctus sea sed eum delenit tincidunt.
-                            Accusam diam lorem magna sed ipsum aliquyam dolor
-                            sit eos eum et clita vel. Justo vel labore nonummy
-                            sed facilisis duis et diam. Sea rebum stet clita
-                            nonumy ut sit no dolores ut est eos voluptua lorem
-                            sed feugiat. Nonumy iriure eirmod et nonumy stet et
-                            eirmod kasd augue et ex dolor vero eos vero.
+                            Les patins sont fournis par la patinoire, tu
+                            n&apos;as donc pas à t&apos;en soucier.
                         </Typography>
                     </Box>
                 </Stack>

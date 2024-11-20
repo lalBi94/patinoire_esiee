@@ -4,7 +4,12 @@ $ciel: #b7deed;
 $red: #4b0505;
 $light_black: #c7c7c7;
 $green: rgb(0, 94, 0);
+$light_red: #a32626;
 $resp: 800px;
+
+html {
+    scroll-behavior: smooth;
+}
 
 * {
     box-sizing: border-box;
@@ -20,6 +25,10 @@ $resp: 800px;
     @media (max-width: $resp) {
         display: none;
     }
+}
+
+* {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -42,10 +51,10 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: url("/giphy.gif");
-    background-size: 300px; /* Ajuste la taille du GIF selon tes besoins */
-    background-repeat: repeat; /* Répète le GIF */
+    background-size: 300px;
+    background-repeat: repeat;
     background-position: center;
-    opacity: 0.3; /* Ajuste l'opacité ici */
-    z-index: -1; /* Met l'arrière-plan derrière tout le contenu */
-    pointer-events: none; /* Pour éviter que l'élément ne bloque les interactions */
+    opacity: 0.3;
+    z-index: -1;
+    pointer-events: none;
 }

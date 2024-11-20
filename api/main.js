@@ -5,7 +5,8 @@ const SQLLiteInteractor = require("./class/SQLLiteInteractor");
 
 (async () => {
     const sli = new SQLLiteInteractor("./data/p_e_b.db");
-    await sli.createTable()
+    await sli.createTable();
+    console.log("on :sqlite3");
 })();
 
 // (async () => {
@@ -34,7 +35,6 @@ const SQLLiteInteractor = require("./class/SQLLiteInteractor");
 //     }
 // })();
 
-
 const corsOption = {
     origin: "*",
     credentials: true,
@@ -56,6 +56,8 @@ app.use("/calendar", calendar);
 const participant = require("./routes/Participant");
 app.use("/participant", participant);
 
+const cotisation = require("./routes/Cotisation");
+app.use("/cotisation", cotisation);
 
 app.listen(5002, () => {
     console.log("on :5002");

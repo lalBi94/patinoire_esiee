@@ -15,6 +15,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Lydia from "../../assets/images/lydia-logo.webp";
+import axios from "axios";
 
 export default function Cotiser() {
     const [identity, setIdentity] = useState("");
@@ -61,9 +62,30 @@ export default function Cotiser() {
             email,
             tel,
             classe,
-            checkApprouveCGU,
-            checkApprouveRules,
-            checkKnowPrac,
+            checkApprouveCGU: checkApprouveCGU ? 1 : 0,
+            checkApprouveRules: checkApprouveRules ? 1 : 0,
+            checkKnowPrac: checkKnowPrac ? 1 : 0,
+        });
+
+        const formData = new FormData();
+        formData.append("identite", identity);
+        formData.append("email", email);
+        formData.append("tel", tel);
+        formData.append("promo", classe);
+        formData.append(
+            "questions",
+            JSON.stringify({
+                knowledge: checkKnowPrac ? 1 : 0,
+                club_rules: checkApprouveRules ? 1 : 0,
+                cgu: checkApprouveCGU ? 1 : 0,
+            })
+        );
+
+        axios.post("http://localhost:5002/cotisation/ask", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            data: formData,
         });
     };
 
@@ -74,16 +96,15 @@ export default function Cotiser() {
                     <Typography level="h3">Formulaire de Cotisation</Typography>
 
                     <Link to="/tarifs" className="cotisation-aventage">
-                        <Typography>
+                        <Typography startDecorator={<CheckCircleIcon />}>
                             Avantage de cotiser dans le club
                         </Typography>
-                        <CheckCircleIcon />
                     </Link>
                 </Box>
 
                 <form onSubmit={handleSubmit} id="cotiser-form">
                     <Stack className="cotiser-form-cat">
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel>Nom et Prenom</FormLabel>
                             <Input
                                 onChange={handleIdentity}
@@ -93,7 +114,7 @@ export default function Cotiser() {
                             />
                         </FormControl>
 
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel>E-mail</FormLabel>
                             <Input
                                 onChange={handleEmail}
@@ -103,7 +124,7 @@ export default function Cotiser() {
                             />
                         </FormControl>
 
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel type="tel">N° du téléphone</FormLabel>
                             <Input
                                 value={tel}
@@ -113,7 +134,7 @@ export default function Cotiser() {
                             />
                         </FormControl>
 
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel>Classe</FormLabel>
                             <Input
                                 value={classe}

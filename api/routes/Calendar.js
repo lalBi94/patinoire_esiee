@@ -21,7 +21,6 @@ router.post("/take", upload.none(), async (req, res) => {
         await sli_connect.decrementPlace(sceance_id);
         await sli_connect.addParticipant(identity, email, tel, sceance_id);
 
-        console.log(identity, cotisantOf, tel, email, sceance_id);
         res.json({ error: null, data: null });
     } catch (err) {
         console.error(err);
@@ -45,7 +44,6 @@ router.post("/addSceance", upload.none(), async (req, res) => {
 router.get("/", async (req, res) => {
     try {
         const data = await sli_connect.getAllSessions();
-        console.log(data);
         res.json({ error: null, data });
     } catch (err) {
         console.error(err);

@@ -11,13 +11,28 @@ import {
     Button,
     FormControl,
     FormLabel,
+    Typography,
+    ModalClose,
+    Modal,
+    ModalDialog,
+    DialogContent,
+    DialogTitle,
 } from "@mui/joy";
+import CancelIcon from "@mui/icons-material/Cancel";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import InfoIcon from "@mui/icons-material/Info";
+import EmailIcon from "@mui/icons-material/Email";
+import CheckIcon from "@mui/icons-material/Check";
 
 export default function Admin() {
-    const [participants, setParticipants] = useState([]);
     const [sceances, setSceances] = useState([]);
     const [date, setDate] = useState(null);
     const [places, setPlaces] = useState(10);
+    const [currentAskCotisant, setCurrentAskCotisant] = useState(null);
+    const [askCotisant, setAskCotisation] = useState([]);
+    const [currentFocus, setCurrentFocus] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [showModalAskCotisant, setShowModalAskCotisant] = useState(false);
 
     const handleDate = (e) => {
         setDate(e.target.value);
@@ -25,6 +40,11 @@ export default function Admin() {
 
     const handlePlaces = (e) => {
         setPlaces(e.target.value);
+    };
+
+    const handleGetAskCotisation = async () => {
+        const req = await axios.get("http://localhost:5002/cotisation/");
+        setAskCotisation(req.data.data);
     };
 
     const handleAddSceance = async (e) => {
@@ -43,6 +63,13 @@ export default function Admin() {
                 data: formData,
             }
         );
+
+        if (!req.data.error) {
+            setSceances([
+                ...sceances,
+                { date, places, id: "NEW", participants: [] },
+            ]);
+        }
 
         console.log(places, new Date(date));
         console.log(req.data);
@@ -83,19 +110,199 @@ export default function Admin() {
     };
 
     const handleClickParticipant = (data) => {
-        alert(
-            `${data.identite}\nTel: ${data.numero_tel}\nEmail: ${data.email}`
-        );
+        setCurrentFocus(data);
+        setShowModal(true);
+    };
+
+    const handleClickCotisant = (data) => {
+        setCurrentAskCotisant(data);
+        setShowModalAskCotisant(true);
+    };
+
+    const handleCloseModal = () => {
+        setCurrentFocus(null);
+        setShowModal(false);
+    };
+
+    const handleCloseModalAskCotisant = () => {
+        setShowModalAskCotisant(false);
+        setCurrentAskCotisant(null);
+    };
+
+    const handleRefuseSomeone = () => {
+        //requete refuse
+        handleCloseModalAskCotisant();
+    };
+
+    const handleAcceptSomeone = () => {
+        //requete accept
+        //handleCloseModalAskCotisant();
     };
 
     useEffect(() => {
         refreshSceances();
+        handleGetAskCotisation();
     }, []);
 
     return (
         <Layout>
+            <Modal open={showModal}>
+                {currentFocus ? (
+                    <ModalDialog color="primary" layout="center" size="md">
+                        <ModalClose onClick={handleCloseModal} />
+
+                        <DialogTitle>
+                            <Typography startDecorator={<InfoIcon />}>
+                                <b>
+                                    <i>
+                                        <u>{currentFocus.identite}</u>
+                                    </i>
+                                </b>
+                            </Typography>
+                        </DialogTitle>
+
+                        <DialogContent>
+                            <Typography level="p">
+                                <b>Email :</b> {currentFocus.email}
+                            </Typography>
+
+                            <Typography level="p">
+                                <b>Tel :</b> {currentFocus.numero_tel}
+                            </Typography>
+                        </DialogContent>
+                    </ModalDialog>
+                ) : null}
+            </Modal>
+
+            <Modal open={showModalAskCotisant}>
+                {currentAskCotisant ? (
+                    <ModalDialog color="primary" layout="center" size="md">
+                        <ModalClose onClick={handleCloseModalAskCotisant} />
+
+                        <DialogTitle>
+                            <Typography startDecorator={<EmailIcon />}>
+                                <b>
+                                    <i>
+                                        <u>{currentAskCotisant.identite}</u>
+                                    </i>
+                                </b>
+                            </Typography>
+                        </DialogTitle>
+
+                        <DialogContent style={{ display: "flex", gap: "10px" }}>
+                            <Stack>
+                                <Typography level="p">
+                                    <b>Email :</b> {currentAskCotisant.email}
+                                </Typography>
+
+                                <Typography level="p">
+                                    <b>Tel :</b> {currentAskCotisant.tel}
+                                </Typography>
+
+                                <Typography level="p">
+                                    <b>Promo :</b> {currentAskCotisant.promo}
+                                </Typography>
+                            </Stack>
+
+                            <Stack>
+                                <Typography level="p">
+                                    <b>Sais patiner ?</b>{" "}
+                                    {currentAskCotisant.knowledge === 1 ? (
+                                        <CheckIcon style={{ color: "green" }} />
+                                    ) : (
+                                        <CancelIcon style={{ color: "red" }} />
+                                    )}
+                                </Typography>
+
+                                <Typography level="p">
+                                    <b>A lu les regles du club ? </b>{" "}
+                                    {currentAskCotisant.club_rules === 1 ? (
+                                        <CheckIcon style={{ color: "green" }} />
+                                    ) : (
+                                        <CancelIcon style={{ color: "red" }} />
+                                    )}
+                                </Typography>
+
+                                <Typography level="p">
+                                    <b>A lu les CGU ? </b>{" "}
+                                    {currentAskCotisant.cgu === 1 ? (
+                                        <CheckIcon style={{ color: "green" }} />
+                                    ) : (
+                                        <CancelIcon style={{ color: "red" }} />
+                                    )}
+                                </Typography>
+                            </Stack>
+
+                            <Stack style={{ display: "flex", gap: "5px" }}>
+                                <Button
+                                    color="success"
+                                    onClick={handleAcceptSomeone}
+                                >
+                                    Confirmer
+                                </Button>
+                                <Button
+                                    color="danger"
+                                    onClick={handleRefuseSomeone}
+                                >
+                                    Refuser
+                                </Button>
+                            </Stack>
+                        </DialogContent>
+                    </ModalDialog>
+                ) : null}
+            </Modal>
+
             <Stack id="admin-lang">
-                <h1 id="admin-title">Zone Administrateur</h1>
+                <Typography textAlign="center" level="h1" id="admin-title">
+                    Zone Administrateur
+                </Typography>
+
+                <Typography textAlign="right" level="h3">
+                    Actions
+                </Typography>
+
+                <Stack className="section">
+                    <h3>Ajouter une sceance</h3>
+
+                    <form
+                        onSubmit={handleAddSceance}
+                        className="section-in-section"
+                    >
+                        <FormControl>
+                            <FormLabel>Date</FormLabel>
+                            <Input
+                                className="section-in-section-ipt"
+                                type="datetime-local"
+                                onChange={handleDate}
+                                required
+                            />
+                        </FormControl>
+
+                        <FormControl>
+                            <FormLabel>Nombre de place</FormLabel>
+                            <Input
+                                className="section-in-section-ipt"
+                                placeholder="ex: 10"
+                                defaultValue={10}
+                                onChange={handlePlaces}
+                                type="number"
+                                value={places}
+                                required
+                            />
+                        </FormControl>
+
+                        <Button
+                            type="submit"
+                            className="section-in-section-btn"
+                        >
+                            Valider
+                        </Button>
+                    </form>
+                </Stack>
+
+                <Typography textAlign="right" level="h3">
+                    Seances
+                </Typography>
 
                 <Stack id="list-sceance">
                     {sceances.length > 0
@@ -107,13 +314,15 @@ export default function Admin() {
                                   <Stack className="list-sceance-box-date">
                                       <b>
                                           <u>
-                                              {format(
-                                                  v.date,
-                                                  "EEEE dd MMMM yyyy",
-                                                  {
-                                                      locale: fr,
-                                                  }
-                                              )}
+                                              <nobr>
+                                                  {format(
+                                                      v.date,
+                                                      "EEEE dd MMMM yyyy",
+                                                      {
+                                                          locale: fr,
+                                                      }
+                                                  )}
+                                              </nobr>
                                           </u>
                                       </b>
                                   </Stack>
@@ -129,13 +338,31 @@ export default function Admin() {
 
                                   <ul className="list-sceance-box-participants">
                                       {v.participants.map((par) => (
-                                          <li
-                                              onClick={() => {
-                                                  handleClickParticipant(par);
-                                              }}
-                                              className="list-sceance-box-participant"
-                                          >
-                                              {par.identite}
+                                          <li className="list-sceance-box-participant">
+                                              <Typography
+                                                  className="list-sceance-box-participant-text"
+                                                  level="p"
+                                                  endDecorator={
+                                                      <Stack className="list-sceance-box-participant-actions">
+                                                          <Button className="list-sceance-box-participant-btn cancel">
+                                                              <CancelIcon fontSize="small" />
+                                                          </Button>
+
+                                                          <Button
+                                                              className="list-sceance-box-participant-btn see"
+                                                              onClick={() => {
+                                                                  handleClickParticipant(
+                                                                      par
+                                                                  );
+                                                              }}
+                                                          >
+                                                              <VisibilityIcon fontSize="small" />
+                                                          </Button>
+                                                      </Stack>
+                                                  }
+                                              >
+                                                  {par.identite}
+                                              </Typography>
                                           </li>
                                       ))}
                                   </ul>
@@ -144,41 +371,31 @@ export default function Admin() {
                         : null}
                 </Stack>
 
-                <Stack className="section">
-                    <h3>Ajouter une sceance</h3>
+                <Typography textAlign="right" level="h3">
+                    Demandes cotisations
+                </Typography>
 
-                    <form
-                        onSubmit={handleAddSceance}
-                        className="section-in-section"
-                    >
-                        <FormControl>
-                            <FormLabel>Date</FormLabel>
-                            <Input
-                                className="section-in-section-ipt"
-                                type="datetime-local"
-                                onChange={handleDate}
-                            />
-                        </FormControl>
-
-                        <FormControl>
-                            <FormLabel>Nombre de place</FormLabel>
-                            <Input
-                                className="section-in-section-ipt"
-                                placeholder="ex: 10"
-                                defaultValue={10}
-                                onChange={handlePlaces}
-                                type="number"
-                                value={places}
-                            />
-                        </FormControl>
-
-                        <Button
-                            type="submit"
-                            className="section-in-section-btn"
-                        >
-                            Valider
-                        </Button>
-                    </form>
+                <Stack id="list-ask-cotisation">
+                    {askCotisant.length > 0
+                        ? askCotisant.map((v) => (
+                              <Stack
+                                  onClick={() => {
+                                      handleClickCotisant(v);
+                                  }}
+                                  className="list-ask-cotisation-box"
+                              >
+                                  <Typography
+                                      className="list-ask-cotisation-box-name"
+                                      textTransform="uppercase"
+                                      startDecorator={
+                                          <EmailIcon fontSize="medium" />
+                                      }
+                                  >
+                                      {v.identite}
+                                  </Typography>
+                              </Stack>
+                          ))
+                        : null}
                 </Stack>
             </Stack>
         </Layout>

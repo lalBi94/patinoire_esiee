@@ -1,7 +1,7 @@
-import { Stack, Typography, Tooltip, Divider } from "@mui/joy";
+import { Stack, Typography, Chip, Divider } from "@mui/joy";
 import "./Footer.scss";
 import { Link } from "react-router-dom";
-import Avatar from "@mui/joy/Avatar";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function Footer() {
     return (
@@ -13,23 +13,47 @@ export default function Footer() {
 
                 <Stack className="footer-data">
                     <Link className="footer-data-content">
-                        <Avatar />
-                        <Typography>
-                            president@patinoir-esiee.fr (President)
+                        <Typography
+                            startDecorator={
+                                <AccountCircleIcon fontSize="medium" />
+                            }
+                            endDecorator={
+                                <Chip size="sm" variant="solid">
+                                    President
+                                </Chip>
+                            }
+                        >
+                            president@patinoir-esiee.fr
                         </Typography>
                     </Link>
 
                     <Link className="footer-data-content">
-                        <Avatar />
-                        <Typography>
-                            admin@patinoir-esiee.fr (Administrateur)
+                        <Typography
+                            startDecorator={
+                                <AccountCircleIcon fontSize="medium" />
+                            }
+                            endDecorator={
+                                <Chip size="sm" variant="solid">
+                                    Administrateur
+                                </Chip>
+                            }
+                        >
+                            admin@patinoir-esiee.fr
                         </Typography>
                     </Link>
 
                     <Link className="footer-data-content">
-                        <Avatar />
-                        <Typography>
-                            bilal.boudjemline@edu.esiee.fr (Web Master)
+                        <Typography
+                            startDecorator={
+                                <AccountCircleIcon fontSize="medium" />
+                            }
+                            endDecorator={
+                                <Chip size="sm" variant="solid">
+                                    Web Master
+                                </Chip>
+                            }
+                        >
+                            bilal.boudjemline@edu.esiee.fr
                         </Typography>
                     </Link>
                 </Stack>

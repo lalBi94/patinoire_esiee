@@ -5,8 +5,6 @@ class SQLLiteInteractor {
         this.db = new sqlite3.Database(dbName, (err) => {
             if (err) {
                 console.error("none :sqlite3", err.message);
-            } else {
-                console.log("on :sqlite3");
             }
         });
     }
@@ -28,6 +26,17 @@ class SQLLiteInteractor {
               session_id INTEGER,
               FOREIGN KEY (session_id) REFERENCES sessions(id)
             );
+
+            CREATE TABLE IF NOT EXISTS demande_cotisations (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              identite TEXT NOT NULL,
+              email TEXT NOT NULL,
+              tel TEXT NOT NULL,
+              promo TEXT NOT NULL,
+              knowledge INTEGER NOT NULL,
+              club_rules INTEGER NOT NULL,
+              cgu INTEGER NOT NULL
+            );
           `;
 
             this.db.exec(query, (err) => {
@@ -39,6 +48,51 @@ class SQLLiteInteractor {
                     );
                 }
             });
+        });
+    }
+
+    getAskCotisation() {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT * FROM demande_cotisations`;
+            this.db.all(query, [], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    addAskCotisation(identite, email, tel, promo, questions) {
+        return new Promise((resolve, reject) => {
+            const query = `INSERT INTO demande_cotisations (identite, email, tel, promo, knowledge, club_rules, cgu) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            this.db.run(
+                query,
+                [
+                    identite,
+                    email,
+                    tel,
+                    promo,
+                    questions.knowledge,
+                    questions.club_rules,
+                    questions.cgu,
+                ],
+                (err) => {
+                    if (err) {
+                        reject(err.message);
+                    } else {
+                        resolve({
+                            id: this.lastID,
+                            identite,
+                            email,
+                            tel,
+                            promo,
+                            questions,
+                        });
+                    }
+                }
+            );
         });
     }
 

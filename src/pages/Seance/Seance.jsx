@@ -10,6 +10,11 @@ import {
     Input,
     Divider,
     RadioGroup,
+    ModalClose,
+    Modal,
+    ModalDialog,
+    DialogContent,
+    DialogTitle,
 } from "@mui/joy";
 import Layout from "../../layout/Layout";
 import { Link } from "react-router-dom";
@@ -20,6 +25,8 @@ import { fr } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const locales = {
     fr: fr,
@@ -46,13 +53,14 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function Seance() {
+    const navigate = useNavigate();
     const [identity, setIdentity] = useState("");
     const [email, setEmail] = useState("");
     const [tel, setTel] = useState("");
     const [cotisantOf, setCotisantOf] = useState("CLUB");
     const [seances, setSeances] = useState([]);
     const [idChoosen, setIdChoosen] = useState(null);
-
+    const [reservationOk, setReservationOk] = useState(false);
     const [dateChooseTimestamp, setDateChooseTimestamp] = useState(null);
     const [dateChoose, setDateChoose] = useState("");
 
@@ -65,7 +73,7 @@ export default function Seance() {
     const getSeance = async () => {
         const req = await axios.get("http://localhost:5002/calendar");
 
-        console.log(req.data)
+        console.log(req.data);
 
         const data = req.data.data.map((e) => ({
             title: (
@@ -116,6 +124,10 @@ export default function Seance() {
         setCotisantOf(e.target.value);
     };
 
+    const handleReservationOk = () => {
+        setReservationOk(!reservationOk);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -126,21 +138,46 @@ export default function Seance() {
         formData.append("tel", tel);
         formData.append("sceance_id", idChoosen);
 
-        axios.post("http://localhost:5002/calendar/take", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            data: formData,
-        }).then((res) => {
-            if(!res.data.error) {
-                alert("Sceance reserver, vous serez bientot contacter !");
-                window.location.reload();
-            }
-        })
+        axios
+            .post("http://localhost:5002/calendar/take", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            })
+            .then((res) => {
+                if (!res.data.error) {
+                    handleReservationOk();
+                }
+            });
+    };
+
+    const handleOnCloseModal = () => {
+        handleReservationOk();
+        navigate("/accueil");
     };
 
     return (
         <Layout>
+            <Modal open={reservationOk}>
+                <ModalDialog color="success" layout="center" size="md">
+                    <ModalClose onClick={handleOnCloseModal} />
+
+                    <DialogTitle>
+                        <Typography startDecorator={<CheckCircleIcon />}>
+                            Succes
+                        </Typography>
+                    </DialogTitle>
+
+                    <DialogContent>
+                        <Typography>
+                            Séance réservée, vous serez bientôt contacté(e) !
+                            Vous pouvez quitter cette page
+                        </Typography>
+                    </DialogContent>
+                </ModalDialog>
+            </Modal>
+
             <Stack id="seance-container">
                 <Box>
                     <Typography level="h3">
@@ -149,7 +186,7 @@ export default function Seance() {
                 </Box>
 
                 <form id="seance-form" onSubmit={handleSubmit}>
-                    <FormControl className="seance-form-cat">
+                    <FormControl required className="seance-form-cat">
                         <FormLabel>Cotisant du</FormLabel>
 
                         <Typography color="danger">
@@ -172,7 +209,7 @@ export default function Seance() {
                     <Divider />
 
                     <Stack className="seance-form-cat">
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel>Nom et Prenom</FormLabel>
                             <Input
                                 onChange={handleIdentity}
@@ -182,7 +219,7 @@ export default function Seance() {
                             />
                         </FormControl>
 
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel>E-mail</FormLabel>
                             <Input
                                 onChange={handleEmail}
@@ -192,7 +229,7 @@ export default function Seance() {
                             />
                         </FormControl>
 
-                        <FormControl>
+                        <FormControl required>
                             <FormLabel>N° du téléphone</FormLabel>
                             <Input
                                 onChange={handleTel}
@@ -205,7 +242,7 @@ export default function Seance() {
 
                     <Divider />
 
-                    <FormControl>
+                    <FormControl required>
                         <FormLabel>Crénaux disponible</FormLabel>
 
                         <Calendar
