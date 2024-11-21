@@ -5,9 +5,9 @@
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 
     #admin-title {
-        font-family: Arial, Helvetica, sans-serif;
         font-size: 25px;
     }
 
@@ -16,7 +16,6 @@
         flex-direction: column;
         gap: 10px;
         width: 250px;
-        font-family: Arial, Helvetica, sans-serif;
         border: 1px solid $light_black;
         padding: 15px;
         background: $white;
@@ -31,6 +30,51 @@
             }
 
             .section-in-section-btn {
+            }
+        }
+    }
+
+    #list-cotisants {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        overflow-x: auto;
+        gap: 15px;
+        border: 1px solid $light_black;
+        padding: 15px;
+        border-radius: 7px;
+        background: $white;
+
+        .list-cotisant-box {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid $light_black;
+            padding: 10px;
+            border-radius: 7px;
+            gap: 15px;
+
+            .list-cotisant-box-img {
+                width: 95px;
+                border-radius: 50px;
+                height: 95px;
+                border: 1px solid $light_black;
+                align-self: center;
+            }
+
+            .list-cotisant-box-name {
+                text-align: center;
+            }
+
+            .list-cotisant-box-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                width: 100%;
+
+                .list-cotisant-box-btn {
+                }
             }
         }
     }

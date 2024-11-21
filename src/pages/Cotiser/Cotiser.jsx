@@ -9,10 +9,16 @@ import {
     Checkbox,
     Input,
     Divider,
+    ModalClose,
+    Modal,
+    ModalDialog,
+    DialogContent,
+    DialogTitle,
 } from "@mui/joy";
 import "./Cotiser.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Lydia from "../../assets/images/lydia-logo.webp";
 import axios from "axios";
@@ -25,6 +31,8 @@ export default function Cotiser() {
     const [checkKnowPrac, setKnowPrac] = useState(false);
     const [checkApprouveRules, setApprouveRules] = useState(false);
     const [checkApprouveCGU, setAppouveCGU] = useState(false);
+    const [onModal, setOnModal] = useState(false);
+    const navigate = useNavigate();
 
     const handleIdentity = (e) => {
         setIdentity(e.target.value);
@@ -54,7 +62,16 @@ export default function Cotiser() {
         setAppouveCGU(event.target.checked);
     };
 
-    const handleSubmit = (e) => {
+    const handleCloseModal = () => {
+        setOnModal(false);
+        navigate("/home");
+    };
+
+    const handleOpenModal = () => {
+        setOnModal(true);
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         console.log({
@@ -81,16 +98,43 @@ export default function Cotiser() {
             })
         );
 
-        axios.post("http://localhost:5002/cotisation/ask", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            data: formData,
-        });
+        const req = await axios.post(
+            "http://localhost:5002/cotisation/ask",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            }
+        );
+
+        if (!req.data.error) {
+            handleOpenModal();
+        }
     };
 
     return (
         <Layout>
+            <Modal open={onModal}>
+                <ModalDialog color="success" layout="center" size="md">
+                    <ModalClose onClick={handleCloseModal} />
+
+                    <DialogTitle>
+                        <Typography startDecorator={<CheckCircleIcon />}>
+                            Succes
+                        </Typography>
+                    </DialogTitle>
+
+                    <DialogContent>
+                        <Typography>
+                            Demande de cotisation validé, vous serez bientôt
+                            contacté(e) !
+                        </Typography>
+                    </DialogContent>
+                </ModalDialog>
+            </Modal>
+
             <Stack id="cotiser-container">
                 <Box id="cotiser-title">
                     <Typography level="h3">Formulaire de Cotisation</Typography>

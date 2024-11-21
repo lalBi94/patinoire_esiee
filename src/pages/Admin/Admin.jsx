@@ -11,6 +11,7 @@ import {
     Button,
     FormControl,
     FormLabel,
+    Avatar,
     Typography,
     ModalClose,
     Modal,
@@ -33,6 +34,16 @@ export default function Admin() {
     const [currentFocus, setCurrentFocus] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showModalAskCotisant, setShowModalAskCotisant] = useState(false);
+    const [cotisants, setCotisant] = useState([]);
+
+    const getCotisant = async () => {
+        const req = await axios.get(
+            "http://localhost:5002/cotisation/retreiveCotisant/"
+        );
+
+        setCotisant(req.data.data);
+        console.log(req.data.data);
+    };
 
     const handleDate = (e) => {
         setDate(e.target.value);
@@ -129,18 +140,67 @@ export default function Admin() {
         setCurrentAskCotisant(null);
     };
 
-    const handleRefuseSomeone = () => {
+    const handleRefuseSomeone = async () => {
+        // TODO: BUG
         //requete refuse
-        handleCloseModalAskCotisant();
+        //handleCloseModalAskCotisant();
+        const formData = new FormData();
+        formData.append("id", currentAskCotisant.id);
+
+        const req = await axios.post(
+            "http://localhost:5002/cotisation/removeAskCotisation",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            }
+        );
+
+        if (!req.data.error) {
+            window.location.reload();
+        }
     };
 
-    const handleAcceptSomeone = () => {
+    const handleAcceptSomeone = async () => {
+        // TODO: BUG
         //requete accept
         //handleCloseModalAskCotisant();
+        const formData = new FormData();
+        formData.append("id", currentAskCotisant.id);
+        formData.append("identite", currentAskCotisant.identite);
+        formData.append("email", currentAskCotisant.email);
+        formData.append("tel", currentAskCotisant.tel);
+        formData.append("promo", currentAskCotisant.promo);
+        formData.append(
+            "questions",
+            JSON.stringify({
+                cgu: currentAskCotisant.cgu,
+                knowledge: currentAskCotisant.knowledge,
+                club_rules: currentAskCotisant.club_rules,
+            })
+        );
+
+        const req = await axios.post(
+            "http://localhost:5002/cotisation/addCotisant",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            }
+        );
+
+        if (!req.data.error) {
+            window.location.reload();
+        }
     };
 
     useEffect(() => {
         refreshSceances();
+        getCotisant();
         handleGetAskCotisation();
     }, []);
 
@@ -206,7 +266,7 @@ export default function Admin() {
 
                             <Stack>
                                 <Typography level="p">
-                                    <b>Sais patiner ?</b>{" "}
+                                    <b>Sait patiner ?</b>{" "}
                                     {currentAskCotisant.knowledge === 1 ? (
                                         <CheckIcon style={{ color: "green" }} />
                                     ) : (
@@ -393,6 +453,87 @@ export default function Admin() {
                                   >
                                       {v.identite}
                                   </Typography>
+                              </Stack>
+                          ))
+                        : null}
+                </Stack>
+
+                <Typography textAlign="right" level="h3">
+                    Cotisants
+                </Typography>
+
+                <Stack id="list-cotisants">
+                    {cotisants
+                        ? cotisants.map((v) => (
+                              <Stack className="list-cotisant-box">
+                                  <Typography
+                                      level="p"
+                                      className="list-cotisant-box-name"
+                                  >
+                                      <u>
+                                          <b>{v.identite}</b>
+                                      </u>
+                                  </Typography>
+
+                                  <img
+                                      className="list-cotisant-box-img"
+                                      src="https://picsum.photos/200"
+                                  />
+
+                                  <Stack>
+                                      <Typography level="p">
+                                          <b>Tel :</b> {v.tel}
+                                      </Typography>
+
+                                      <Typography level="p">
+                                          <b>Email :</b> {v.email}
+                                      </Typography>
+
+                                      <Typography level="p">
+                                          <b>Promo :</b> {v.promo}
+                                      </Typography>
+                                  </Stack>
+
+                                  <Stack>
+                                      <Typography level="p">
+                                          <b>Sait patiner ?</b>{" "}
+                                          {v.knowledge === 1 ? (
+                                              <CheckIcon
+                                                  style={{ color: "green" }}
+                                              />
+                                          ) : (
+                                              <CancelIcon
+                                                  style={{ color: "red" }}
+                                              />
+                                          )}
+                                      </Typography>
+
+                                      <Typography level="p">
+                                          <b>A lu les regles du club ? </b>{" "}
+                                          {v.club_rules === 1 ? (
+                                              <CheckIcon
+                                                  style={{ color: "green" }}
+                                              />
+                                          ) : (
+                                              <CancelIcon
+                                                  style={{ color: "red" }}
+                                              />
+                                          )}
+                                      </Typography>
+
+                                      <Typography level="p">
+                                          <b>A lu les CGU ? </b>{" "}
+                                          {v.cgu === 1 ? (
+                                              <CheckIcon
+                                                  style={{ color: "green" }}
+                                              />
+                                          ) : (
+                                              <CancelIcon
+                                                  style={{ color: "red" }}
+                                              />
+                                          )}
+                                      </Typography>
+                                  </Stack>
                               </Stack>
                           ))
                         : null}

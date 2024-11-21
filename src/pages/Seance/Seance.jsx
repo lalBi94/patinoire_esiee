@@ -172,7 +172,6 @@ export default function Seance() {
                     <DialogContent>
                         <Typography>
                             Séance réservée, vous serez bientôt contacté(e) !
-                            Vous pouvez quitter cette page
                         </Typography>
                     </DialogContent>
                 </ModalDialog>

@@ -37,6 +37,17 @@ class SQLLiteInteractor {
               club_rules INTEGER NOT NULL,
               cgu INTEGER NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS cotisants (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              identite TEXT NOT NULL,
+              email TEXT NOT NULL,
+              tel TEXT NOT NULL,
+              promo TEXT NOT NULL,
+              knowledge INTEGER NOT NULL,
+              club_rules INTEGER NOT NULL,
+              cgu INTEGER NOT NULL
+            )
           `;
 
             this.db.exec(query, (err) => {
@@ -46,6 +57,65 @@ class SQLLiteInteractor {
                     resolve(
                         "Tables sessions et participants créées ou déjà existantes."
                     );
+                }
+            });
+        });
+    }
+
+    removeAskCotisant(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM demande_cotisations WHERE id=?`;
+            this.db.run(query, [id], (err) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(null);
+                }
+            });
+        });
+    }
+
+    addCotisant(identite, email, tel, promo, questions) {
+        return new Promise((resolve, reject) => {
+            const query = `INSERT INTO cotisants (identite, email, tel, promo, knowledge, club_rules, cgu) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+            this.db.run(
+                query,
+                [
+                    identite,
+                    email,
+                    tel,
+                    promo,
+                    questions.knowledge,
+                    questions.club_rules,
+                    questions.cgu,
+                ],
+                (err) => {
+                    if (err) {
+                        reject(err.message);
+                    } else {
+                        resolve({
+                            id: this.lastID,
+                            identite,
+                            email,
+                            tel,
+                            promo,
+                            questions,
+                        });
+                    }
+                }
+            );
+        });
+    }
+
+    getCotisant() {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT * FROM cotisants`;
+            this.db.all(query, [], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
                 }
             });
         });
