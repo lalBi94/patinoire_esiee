@@ -71,7 +71,7 @@ export default function Seance() {
     };
 
     const getSeance = async () => {
-        const req = await axios.get("http://localhost:5002/calendar");
+        const req = await axios.get("http://88.209.83.32:5002/calendar");
 
         console.log(req.data);
 
@@ -139,7 +139,7 @@ export default function Seance() {
         formData.append("sceance_id", idChoosen);
 
         axios
-            .post("http://localhost:5002/calendar/take", formData, {
+            .post("http://88.209.83.32:5002/calendar/take", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

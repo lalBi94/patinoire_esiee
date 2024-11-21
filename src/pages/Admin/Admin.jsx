@@ -38,7 +38,7 @@ export default function Admin() {
 
     const getCotisant = async () => {
         const req = await axios.get(
-            "http://localhost:5002/cotisation/retreiveCotisant/"
+            "http://88.209.83.32:5002/cotisation/retreiveCotisant/"
         );
 
         setCotisant(req.data.data);
@@ -54,7 +54,7 @@ export default function Admin() {
     };
 
     const handleGetAskCotisation = async () => {
-        const req = await axios.get("http://localhost:5002/cotisation/");
+        const req = await axios.get("http://88.209.83.32:5002/cotisation/");
         setAskCotisation(req.data.data);
     };
 
@@ -65,7 +65,7 @@ export default function Admin() {
         formData.append("places", places);
 
         const req = await axios.post(
-            "http://localhost:5002/calendar/addSceance",
+            "http://88.209.83.32:5002/calendar/addSceance",
             formData,
             {
                 headers: {
@@ -87,14 +87,14 @@ export default function Admin() {
     };
 
     const getSceanceDebug = async () => {
-        const req = await axios.get("http://localhost:5002/calendar");
+        const req = await axios.get("http://88.209.83.32:5002/calendar");
 
         for (let e in req.data.data) {
             const formData = new FormData();
             formData.append("id", req.data.data[e].id);
 
             const data = await axios.post(
-                "http://localhost:5002/participant/participantBySeance",
+                "http://88.209.83.32:5002/participant/participantBySeance",
                 formData,
                 {
                     headers: {
@@ -148,7 +148,7 @@ export default function Admin() {
         formData.append("id", currentAskCotisant.id);
 
         const req = await axios.post(
-            "http://localhost:5002/cotisation/removeAskCotisation",
+            "http://88.209.83.32:5002/cotisation/removeAskCotisation",
             formData,
             {
                 headers: {
@@ -183,7 +183,7 @@ export default function Admin() {
         );
 
         const req = await axios.post(
-            "http://localhost:5002/cotisation/addCotisant",
+            "http://88.209.83.32:5002/cotisation/addCotisant",
             formData,
             {
                 headers: {
