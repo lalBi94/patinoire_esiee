@@ -278,11 +278,11 @@ class SQLLiteInteractor {
             const query = `UPDATE sessions SET places = places - 1 WHERE id = ? AND places > 0`;
             this.db.run(query, [id], function (err) {
                 if (err) {
-                    reject(err.message);
+                    reject(false);
                 } else if (this.changes === 0) {
-                    resolve(`Aucune place à réduire pour l'ID ${id}.`);
+                    resolve(false);
                 } else {
-                    resolve(`Une place a été retirée pour l'ID ${id}.`);
+                    resolve(true);
                 }
             });
         });
@@ -323,6 +323,7 @@ class SQLLiteInteractor {
     }
 
     incrementPlace(id) {
+        console.log("id du incerement : " + id);
         return new Promise((resolve, reject) => {
             const query = `UPDATE sessions SET places = places + 1 WHERE id = ? AND places > 0`;
             this.db.run(query, [id], function (err) {

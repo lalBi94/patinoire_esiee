@@ -20,9 +20,9 @@ router.post("/participantBySeance", upload.none(), async (req, res) => {
 
 router.post("/removeParticipant", upload.none(), async (req, res) => {
     try {
-        const { id_bro, id_seance } = req.body;
+        const { id_bro, id_sceance } = req.body;
         await sli_connect.deleteParticipant(id_bro);
-        await sli_connect.incrementPlace(id_seance);
+        await sli_connect.incrementPlace(id_sceance);
         res.json({ error: null, data: null });
     } catch (err) {
         console.error(err);

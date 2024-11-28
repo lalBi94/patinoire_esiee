@@ -18,6 +18,7 @@ import {
 } from "@mui/joy";
 import Layout from "../../layout/Layout";
 import { Link } from "react-router-dom";
+import ErrorIcon from "@mui/icons-material/Error";
 import Lydia from "../../assets/images/lydia-logo.webp";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
@@ -25,7 +26,6 @@ import { fr } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const locales = {
@@ -53,7 +53,6 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function Seance() {
-    const navigate = useNavigate();
     const [identity, setIdentity] = useState("");
     const [email, setEmail] = useState("");
     const [tel, setTel] = useState("");
@@ -63,6 +62,8 @@ export default function Seance() {
     const [reservationOk, setReservationOk] = useState(false);
     const [dateChooseTimestamp, setDateChooseTimestamp] = useState(null);
     const [dateChoose, setDateChoose] = useState("");
+    const [reservationNonOk, setReservationNonOk] = useState(false);
+    const [inLoadingReservation, setInLoadingReservation] = useState(false);
 
     const saveDate = (date) => {
         setDateChooseTimestamp(date);
@@ -128,8 +129,13 @@ export default function Seance() {
         setReservationOk(!reservationOk);
     };
 
+    const handleReservationNonOk = () => {
+        setReservationNonOk(!reservationNonOk);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        setInLoadingReservation(true);
 
         const formData = new FormData();
         formData.append("identity", identity);
@@ -146,15 +152,23 @@ export default function Seance() {
                 data: formData,
             })
             .then((res) => {
+                setInLoadingReservation(false);
+
                 if (!res.data.error) {
                     handleReservationOk();
+                } else {
+                    handleReservationNonOk();
                 }
             });
     };
 
     const handleOnCloseModal = () => {
         handleReservationOk();
-        navigate("/accueil");
+        window.location.reload();
+    };
+
+    const handleOnCloseModalNonOk = () => {
+        handleReservationNonOk();
     };
 
     return (
@@ -177,6 +191,25 @@ export default function Seance() {
                 </ModalDialog>
             </Modal>
 
+            <Modal open={reservationNonOk}>
+                <ModalDialog color="error" layout="center" size="md">
+                    <ModalClose onClick={handleOnCloseModalNonOk} />
+
+                    <DialogTitle>
+                        <Typography startDecorator={<ErrorIcon />}>
+                            Erreur
+                        </Typography>
+                    </DialogTitle>
+
+                    <DialogContent>
+                        <Typography>
+                            Vous ne pouvez pas reserver cette sceance ! Mille
+                            excuses...
+                        </Typography>
+                    </DialogContent>
+                </ModalDialog>
+            </Modal>
+
             <Stack id="seance-container">
                 <Box>
                     <Typography level="h3">
@@ -186,22 +219,20 @@ export default function Seance() {
 
                 <form id="seance-form" onSubmit={handleSubmit}>
                     <FormControl required className="seance-form-cat">
-                        <FormLabel>Cotisant du</FormLabel>
-
-                        <Typography color="danger">
-                            Etre cotisant du club ou du BDS est obligatoire !{" "}
-                            <Link to="/cotiser">
-                                (Cliquez ici si ce n&apos;est pas fait)
-                            </Link>
-                        </Typography>
+                        <FormLabel>Cotisant</FormLabel>
 
                         <RadioGroup
                             onChange={handleCotisantOf}
                             name="cotisant"
-                            defaultValue="CLUB"
+                            defaultValue="AUCUNE"
                         >
-                            <Radio required value="BDS" label="BDS" />
-                            <Radio required value="CLUB" label="Club" />
+                            <Radio required value="CLUB" label="Club (8,75€)" />
+                            <Radio required value="BDS" label="BDS (9,75€)" />
+                            <Radio
+                                required
+                                value="AUCUNE"
+                                label="Aucune (9,75€)"
+                            />
                         </RadioGroup>
                     </FormControl>
 
@@ -273,11 +304,12 @@ export default function Seance() {
                     <Stack className="seance-form-cat">
                         <FormLabel>Paiement</FormLabel>
                         <Typography>
-                            Nous vous invitons à effectuer le paiement selon la
-                            cotisation que vous avez via{" "}
-                            <Link to="https://www.lydia.me/">Lydia</Link>. Votre
-                            inscription ne sera validée qu&apos;après réception
-                            du paiement.
+                            Nous vous invitons à effectuer le paiement via{" "}
+                            <Link to="https://www.lydia.me/">Lydia</Link> selon
+                            votre statut de cotisant. Si vous êtes cotisant, le
+                            montant est de <b>8,75€</b>, sinon il s'élève à{" "}
+                            <b>9,75€</b>. Votre inscription ne sera validée
+                            qu'après réception du paiement.
                         </Typography>
 
                         <Typography color="danger">
@@ -288,6 +320,7 @@ export default function Seance() {
                         </Typography>
 
                         <Button
+                            loading={inLoadingReservation}
                             disabled={
                                 !(
                                     identity.length > 0 &&

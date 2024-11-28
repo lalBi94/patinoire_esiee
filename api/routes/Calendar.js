@@ -18,10 +18,15 @@ router.post("/take", upload.none(), async (req, res) => {
     try {
         const { identity, cotisantOf, tel, email, sceance_id } = req.body;
 
-        await sli_connect.decrementPlace(sceance_id);
-        await sli_connect.addParticipant(identity, email, tel, sceance_id);
+        const isOk = await sli_connect.decrementPlace(sceance_id);
+        console.log(isOk);
 
-        res.json({ error: null, data: null });
+        if (isOk) {
+            await sli_connect.addParticipant(identity, email, tel, sceance_id);
+            res.json({ error: null, data: null });
+        } else {
+            res.json({ error: "Impossible de reserver !", data: null });
+        }
     } catch (err) {
         console.error(err);
         res.json({ error: "Impossible de reserver !", data: null });

@@ -6,8 +6,12 @@
   "scripts": {
     "start": "node main.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ESIEE Paris",
+    "Club Pationoire",
+    "Club ESIEE Paris"
+  ],
+  "author": "Bilal Boudjemline (lalBi94 on GitHub)",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.7",

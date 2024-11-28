@@ -18,7 +18,6 @@ import {
 import "./Cotiser.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Lydia from "../../assets/images/lydia-logo.webp";
 import axios from "axios";
@@ -32,7 +31,7 @@ export default function Cotiser() {
     const [checkApprouveRules, setApprouveRules] = useState(false);
     const [checkApprouveCGU, setAppouveCGU] = useState(false);
     const [onModal, setOnModal] = useState(false);
-    const navigate = useNavigate();
+    const [inLoadingCotisation, setInLoadingCotisation] = useState(false);
 
     const handleIdentity = (e) => {
         setIdentity(e.target.value);
@@ -64,7 +63,7 @@ export default function Cotiser() {
 
     const handleCloseModal = () => {
         setOnModal(false);
-        navigate("/home");
+        window.location.reload();
     };
 
     const handleOpenModal = () => {
@@ -73,6 +72,7 @@ export default function Cotiser() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setInLoadingCotisation(true);
 
         console.log({
             identity,
@@ -216,11 +216,9 @@ export default function Cotiser() {
                     <Stack className="cotiser-form-cat">
                         <FormLabel>Paiement</FormLabel>
                         <Typography>
-                            Veuillez régler les droits d&apos;adhésion{" "}
-                            <b>
-                                <i>(10€)</i>
-                            </b>{" "}
-                            via le bouton ci-dessous, qui vous redirigera vers{" "}
+                            Veuillez régler les droits d&apos;adhésion de{" "}
+                            <b>10,00€</b> via le bouton ci-dessous, qui vous
+                            redirigera vers{" "}
                             <Link to="https://www.lydia.me/">Lydia</Link>. Vous
                             serez ensuite rapidement contacté via les
                             informations fournies pour finaliser votre adhésion.
@@ -234,6 +232,7 @@ export default function Cotiser() {
 
                         <Button
                             type="submit"
+                            loading={inLoadingCotisation}
                             disabled={
                                 !(
                                     identity.length > 0 &&

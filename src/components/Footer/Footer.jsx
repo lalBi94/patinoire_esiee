@@ -87,7 +87,9 @@ export default function Footer() {
             <Divider className="hide-on-resp" orientation="vertical" />
 
             <Stack className="footer-cat">
-                <img src={EsieeLogo} alt="Logo ESIEE" />
+                <a href="https://www.esiee.fr/" target="_blank">
+                    <img src={EsieeLogo} alt="Logo ESIEE" />
+                </a>
             </Stack>
         </Stack>
     );
