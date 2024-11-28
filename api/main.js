@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const SQLLiteInteractor = require("./class/SQLLiteInteractor");
+const path = require("path");
 
 (async () => {
     const sli = new SQLLiteInteractor("./data/p_e_b.db");
@@ -9,15 +10,9 @@ const SQLLiteInteractor = require("./class/SQLLiteInteractor");
     console.log("on :sqlite3");
 })();
 
+// TODO: NE PAS OUBLIER DE REGLER LE DOMAIN !
 const corsOption = {
-    origin: (origin, callback) => {
-        const allowedOrigins = ["http://localhost:5173"];
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
+    origin: "*",
     credentials: true,
     methods: "GET, POST",
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -26,6 +21,7 @@ const corsOption = {
 const app = express();
 app.use(bodyParser.json());
 app.use(cors(corsOption));
+app.use(express.static(path.resolve(__dirname, "dist")));
 
 app.use((req, res, next) => {
     console.log("\n↓↓↓↓↓↓↓↓↓", req.ip || req.connection.remoteAddress);
@@ -40,6 +36,10 @@ app.use("/participant", participant);
 
 const cotisation = require("./routes/Cotisation");
 app.use("/cotisation", cotisation);
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+});
 
 app.listen(5002, () => {
     console.log("on :5002");
