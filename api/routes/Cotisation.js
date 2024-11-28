@@ -51,10 +51,12 @@ router.post("/addCotisant", upload.none(), async (req, res) => {
             email,
             tel,
             promo,
-            JSON.parse(questions)
+            questions ? JSON.parse(questions) : null
         );
 
-        await sli_connect.removeAskCotisant(id);
+        if (id) {
+            await sli_connect.removeAskCotisant(id);
+        }
 
         res.json({ error: null, data: null });
     } catch (err) {

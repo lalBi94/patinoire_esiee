@@ -33,4 +33,5 @@ class CalendarPieceValidator {
     }
 }
 
+// eslint-disable-next-line no-undef
 module.exports = CalendarPieceValidator;

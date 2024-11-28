@@ -99,7 +99,7 @@ export default function Cotiser() {
         );
 
         const req = await axios.post(
-            "http://88.209.83.32:5002/cotisation/ask",
+            "http://localhost:5002/cotisation/ask",
             formData,
             {
                 headers: {

@@ -44,6 +44,7 @@
 #nav-container {
     display: flex;
     flex-direction: row;
+    margin-top: 10px;
     justify-content: center;
     align-items: center;
     gap: 40px;
@@ -69,7 +70,7 @@
         }
 
         img {
-            height: 100px;
+            height: 90px;
         }
     }
 

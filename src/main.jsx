@@ -1,10 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-    createBrowserRouter,
-    createHashRouter,
-    RouterProvider,
-} from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./index.scss";
 import Home from "./pages/Home/Home";
 import Cotiser from "./pages/Cotiser/Cotiser";
@@ -17,7 +13,7 @@ const router = createHashRouter([
     { path: "cotiser", element: <Cotiser /> },
     { path: "tarifs", element: <Tarif /> },
     { path: "seance", element: <Seance /> },
-    {path: "adminland", element: <Admin/> },
+    { path: "adminland", element: <Admin /> },
 ]);
 
 createRoot(document.getElementById("root")).render(

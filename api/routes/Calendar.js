@@ -41,6 +41,18 @@ router.post("/addSceance", upload.none(), async (req, res) => {
     }
 });
 
+router.post("/deleteSceance", upload.none(), async (req, res) => {
+    try {
+        const { id } = req.body;
+        await sli_connect.deleteSceance(id);
+
+        res.json({ error: null, data: null });
+    } catch (err) {
+        console.error(err);
+        res.json({ error: "Impossible de creer une sceance !", data: null });
+    }
+});
+
 router.get("/", async (req, res) => {
     try {
         const data = await sli_connect.getAllSessions();

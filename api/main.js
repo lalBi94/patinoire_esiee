@@ -9,36 +9,18 @@ const SQLLiteInteractor = require("./class/SQLLiteInteractor");
     console.log("on :sqlite3");
 })();
 
-// (async () => {
-//     const sli = new SQLLiteInteractor('./data/p_e_b.db');
-//
-//     try {
-//         console.log(await sli.createTable());
-//
-//         const sessions = [
-//             { "id": 1, "date": "2024-11-14T09:00:00.000Z", "places": 10 },
-//             { "id": 2, "date": "2024-11-15T12:00:00.000Z", "places": 20 },
-//             { "id": 3, "date": "2024-11-16T15:30:00.000Z", "places": 5 },
-//             { "id": 4, "date": "2024-11-17T18:45:00.000Z", "places": 8 },
-//             { "id": 5, "date": "2024-11-18T22:00:00.000Z", "places": 15 }
-//         ];
-//
-//         for (const session of sessions) {
-//             const addedSession = await sli.addSession(session.date, session.places);
-//             console.log(`Session ajoutée: ID = ${addedSession.id}, Date = ${new Date(session.date).toISOString()}, Places = ${session.places}`);
-//         }
-//
-//     } catch (err) {
-//         console.error('Erreur:', err);
-//     } finally {
-//         await sli.close();
-//     }
-// })();
-
 const corsOption = {
-    origin: "*",
+    origin: (origin, callback) => {
+        const allowedOrigins = ["http://localhost:5173"];
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
-    optionSuccessStatus: 200,
+    methods: "GET, POST",
+    allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 const app = express();

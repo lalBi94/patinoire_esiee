@@ -18,4 +18,16 @@ router.post("/participantBySeance", upload.none(), async (req, res) => {
     }
 });
 
+router.post("/removeParticipant", upload.none(), async (req, res) => {
+    try {
+        const { id_bro, id_seance } = req.body;
+        await sli_connect.deleteParticipant(id_bro);
+        await sli_connect.incrementPlace(id_seance);
+        res.json({ error: null, data: null });
+    } catch (err) {
+        console.error(err);
+        res.json({ error: "Une erreur est survenue !", data: null });
+    }
+});
+
 module.exports = router;

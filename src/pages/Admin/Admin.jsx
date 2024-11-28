@@ -11,7 +11,6 @@ import {
     Button,
     FormControl,
     FormLabel,
-    Avatar,
     Typography,
     ModalClose,
     Modal,
@@ -35,10 +34,106 @@ export default function Admin() {
     const [showModal, setShowModal] = useState(false);
     const [showModalAskCotisant, setShowModalAskCotisant] = useState(false);
     const [cotisants, setCotisant] = useState([]);
+    const [regCotisantIdentite, setRegCotisantIdentite] = useState("");
+    const [regCotisantPromo, setRegCotisantPromo] = useState("");
+    const [regCotisantEmail, setRegCotisantEmail] = useState("");
+    const [regCotisantTel, setRegCotisantTel] = useState("");
+
+    const handleDeleteSeance = async (id_sceance) => {
+        const formData = new FormData();
+        formData.append("id", id_sceance);
+
+        const req = await axios.post(
+            "http://localhost:5002/calendar/deleteSceance",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            }
+        );
+
+        if (!req.data.error) {
+            window.location.reload();
+        }
+    };
+
+    const handleDeleteSomeone = async (id_bro, id_sceance) => {
+        const formData = new FormData();
+        formData.append("id_bro", id_bro);
+        formData.append("id_sceance", id_sceance);
+
+        const req = await axios.post(
+            "http://localhost:5002/participant/removeParticipant",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            }
+        );
+
+        if (!req.data.error) {
+            window.location.reload();
+        }
+    };
+
+    const handleSubmitRegCotisant = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("identite", regCotisantIdentite);
+        formData.append("promo", regCotisantPromo);
+        formData.append("email", regCotisantEmail);
+        formData.append("tel", regCotisantTel);
+
+        const req = await axios.post(
+            "http://localhost:5002/cotisation/addCotisant",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+            }
+        );
+
+        if (!req.data.error) {
+            window.location.reload();
+        }
+
+        console.log(
+            {
+                regCotisantIdentite,
+                regCotisantPromo,
+                regCotisantEmail,
+                regCotisantTel,
+            },
+            req.data
+        );
+    };
+
+    const handleRegCotisantIdentite = (e) => {
+        setRegCotisantIdentite(e.target.value);
+    };
+
+    const handleRegCotisantPromo = (e) => {
+        setRegCotisantPromo(e.target.value);
+    };
+
+    const handleRegCotisantEmail = (e) => {
+        setRegCotisantEmail(e.target.value);
+    };
+
+    const handleRegCotisantTel = (e) => {
+        setRegCotisantTel(e.target.value);
+    };
 
     const getCotisant = async () => {
         const req = await axios.get(
-            "http://88.209.83.32:5002/cotisation/retreiveCotisant/"
+            "http://localhost:5002/cotisation/retreiveCotisant/"
         );
 
         setCotisant(req.data.data);
@@ -54,7 +149,7 @@ export default function Admin() {
     };
 
     const handleGetAskCotisation = async () => {
-        const req = await axios.get("http://88.209.83.32:5002/cotisation/");
+        const req = await axios.get("http://localhost:5002/cotisation/");
         setAskCotisation(req.data.data);
     };
 
@@ -65,7 +160,7 @@ export default function Admin() {
         formData.append("places", places);
 
         const req = await axios.post(
-            "http://88.209.83.32:5002/calendar/addSceance",
+            "http://localhost:5002/calendar/addSceance",
             formData,
             {
                 headers: {
@@ -87,14 +182,14 @@ export default function Admin() {
     };
 
     const getSceanceDebug = async () => {
-        const req = await axios.get("http://88.209.83.32:5002/calendar");
+        const req = await axios.get("http://localhost:5002/calendar");
 
         for (let e in req.data.data) {
             const formData = new FormData();
             formData.append("id", req.data.data[e].id);
 
             const data = await axios.post(
-                "http://88.209.83.32:5002/participant/participantBySeance",
+                "http://localhost:5002/participant/participantBySeance",
                 formData,
                 {
                     headers: {
@@ -148,7 +243,7 @@ export default function Admin() {
         formData.append("id", currentAskCotisant.id);
 
         const req = await axios.post(
-            "http://88.209.83.32:5002/cotisation/removeAskCotisation",
+            "http://localhost:5002/cotisation/removeAskCotisation",
             formData,
             {
                 headers: {
@@ -183,7 +278,7 @@ export default function Admin() {
         );
 
         const req = await axios.post(
-            "http://88.209.83.32:5002/cotisation/addCotisant",
+            "http://localhost:5002/cotisation/addCotisant",
             formData,
             {
                 headers: {
@@ -321,43 +416,109 @@ export default function Admin() {
                     Actions
                 </Typography>
 
-                <Stack className="section">
-                    <h3>Ajouter une sceance</h3>
+                <Stack gap={3} display={"flex"} flexDirection={"row"}>
+                    <Stack className="section">
+                        <h3>Ajouter une sceance</h3>
 
-                    <form
-                        onSubmit={handleAddSceance}
-                        className="section-in-section"
-                    >
-                        <FormControl>
-                            <FormLabel>Date</FormLabel>
-                            <Input
-                                className="section-in-section-ipt"
-                                type="datetime-local"
-                                onChange={handleDate}
-                                required
-                            />
-                        </FormControl>
-
-                        <FormControl>
-                            <FormLabel>Nombre de place</FormLabel>
-                            <Input
-                                className="section-in-section-ipt"
-                                placeholder="ex: 10"
-                                defaultValue={10}
-                                onChange={handlePlaces}
-                                type="number"
-                                value={places}
-                                required
-                            />
-                        </FormControl>
-
-                        <Button
-                            type="submit"
-                            className="section-in-section-btn"
+                        <form
+                            onSubmit={handleAddSceance}
+                            className="section-in-section"
                         >
-                            Valider
-                        </Button>
-                    </form>
+                            <FormControl>
+                                <FormLabel>Date</FormLabel>
+                                <Input
+                                    className="section-in-section-ipt"
+                                    type="datetime-local"
+                                    onChange={handleDate}
+                                    required
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel>Nombre de place</FormLabel>
+                                <Input
+                                    className="section-in-section-ipt"
+                                    placeholder="ex: 10"
+                                    defaultValue={10}
+                                    onChange={handlePlaces}
+                                    type="number"
+                                    value={places}
+                                    required
+                                />
+                            </FormControl>
+
+                            <Button
+                                type="submit"
+                                className="section-in-section-btn"
+                            >
+                                Valider
+                            </Button>
+                        </form>
+                    </Stack>
+
+                    <Stack className="section">
+                        <h3>Ajouter un(e) cotisant(e)</h3>
+
+                        <form
+                            onSubmit={handleSubmitRegCotisant}
+                            className="section-in-section"
+                        >
+                            <FormControl>
+                                <FormLabel>Nom & Prenom</FormLabel>
+                                <Input
+                                    className="section-in-section-ipt"
+                                    type="texte"
+                                    placeholder="Ex: Jean Paul"
+                                    onChange={handleRegCotisantIdentite}
+                                    value={regCotisantIdentite}
+                                    required
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel>Email</FormLabel>
+                                <Input
+                                    className="section-in-section-ipt"
+                                    placeholder="ex: abc@def.gh"
+                                    onChange={handleRegCotisantEmail}
+                                    type="email"
+                                    value={regCotisantEmail}
+                                    required
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel>Numéro de télephone</FormLabel>
+                                <Input
+                                    className="section-in-section-ipt"
+                                    placeholder="ex: 0670504937"
+                                    onChange={handleRegCotisantTel}
+                                    type="tel"
+                                    value={regCotisantTel}
+                                    required
+                                />
+                            </FormControl>
+
+                            <FormControl>
+                                <FormLabel>Promo</FormLabel>
+                                <Input
+                                    className="section-in-section-ipt"
+                                    placeholder="ex: E3T"
+                                    onChange={handleRegCotisantPromo}
+                                    type="text"
+                                    value={regCotisantPromo}
+                                    required
+                                />
+                            </FormControl>
+
+                            <Button
+                                type="submit"
+                                className="section-in-section-btn"
+                            >
+                                Créer
+                            </Button>
+                        </form>
+                    </Stack>
                 </Stack>
 
                 <Typography textAlign="right" level="h3">
@@ -366,8 +527,15 @@ export default function Admin() {
 
                 <Stack id="list-sceance">
                     {sceances.length > 0
-                        ? sceances.map((v) => (
-                              <Stack className="list-sceance-box">
+                        ? sceances.map((v, k) => (
+                              <Stack key={k} className="list-sceance-box">
+                                  <CancelIcon
+                                      onClick={() => {
+                                          handleDeleteSeance(v.id);
+                                      }}
+                                      className="list-seance-box-close"
+                                  />
+
                                   <Stack className="list-sceance-box-id">
                                       #{v.id}
                                   </Stack>
@@ -397,14 +565,25 @@ export default function Admin() {
                                   <Divider />
 
                                   <ul className="list-sceance-box-participants">
-                                      {v.participants.map((par) => (
-                                          <li className="list-sceance-box-participant">
+                                      {v.participants.map((par, k) => (
+                                          <li
+                                              key={k}
+                                              className="list-sceance-box-participant"
+                                          >
                                               <Typography
                                                   className="list-sceance-box-participant-text"
                                                   level="p"
                                                   endDecorator={
                                                       <Stack className="list-sceance-box-participant-actions">
-                                                          <Button className="list-sceance-box-participant-btn cancel">
+                                                          <Button
+                                                              onClick={() => {
+                                                                  handleDeleteSomeone(
+                                                                      par.id,
+                                                                      v.id
+                                                                  );
+                                                              }}
+                                                              className="list-sceance-box-participant-btn cancel"
+                                                          >
                                                               <CancelIcon fontSize="small" />
                                                           </Button>
 
@@ -437,8 +616,9 @@ export default function Admin() {
 
                 <Stack id="list-ask-cotisation">
                     {askCotisant.length > 0
-                        ? askCotisant.map((v) => (
+                        ? askCotisant.map((v, k) => (
                               <Stack
+                                  key={k}
                                   onClick={() => {
                                       handleClickCotisant(v);
                                   }}
@@ -464,8 +644,8 @@ export default function Admin() {
 
                 <Stack id="list-cotisants">
                     {cotisants
-                        ? cotisants.map((v) => (
-                              <Stack className="list-cotisant-box">
+                        ? cotisants.map((v, k) => (
+                              <Stack key={k} className="list-cotisant-box">
                                   <Typography
                                       level="p"
                                       className="list-cotisant-box-name"

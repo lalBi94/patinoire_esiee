@@ -1,6 +1,7 @@
 import { Stack, Typography, Chip, Divider } from "@mui/joy";
 import "./Footer.scss";
 import { Link } from "react-router-dom";
+import EsieeLogo from "../../assets/images/esiee-paris.webp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function Footer() {
@@ -61,9 +62,11 @@ export default function Footer() {
 
             <Divider className="hide-on-resp" orientation="vertical" />
 
-            <Stack className="footer-cat">
+            <Stack>
                 <Typography className="footer-info-title">
-                    <u>Mentions legales</u>
+                    <u>
+                        <b>Mentions legales</b>
+                    </u>
                 </Typography>
 
                 <Stack className="footer-data">
@@ -79,6 +82,12 @@ export default function Footer() {
                         <Typography>Regles du club</Typography>
                     </Link>
                 </Stack>
+            </Stack>
+
+            <Divider className="hide-on-resp" orientation="vertical" />
+
+            <Stack className="footer-cat">
+                <img src={EsieeLogo} alt="Logo ESIEE" />
             </Stack>
         </Stack>
     );

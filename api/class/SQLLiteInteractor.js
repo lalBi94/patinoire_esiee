@@ -86,9 +86,9 @@ class SQLLiteInteractor {
                     email,
                     tel,
                     promo,
-                    questions.knowledge,
-                    questions.club_rules,
-                    questions.cgu,
+                    questions?.knowledge ? questions?.knowledge : 1,
+                    questions?.club_rules ? questions?.club_rules : 1,
+                    questions?.cgu ? questions?.cgu : 1,
                 ],
                 (err) => {
                     if (err) {
@@ -283,6 +283,55 @@ class SQLLiteInteractor {
                     resolve(`Aucune place à réduire pour l'ID ${id}.`);
                 } else {
                     resolve(`Une place a été retirée pour l'ID ${id}.`);
+                }
+            });
+        });
+    }
+
+    deleteParticipant(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM participants WHERE id=?`;
+            this.db.run(query, [id], (err) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(null);
+                }
+            });
+        });
+    }
+
+    deleteSceance(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM participants WHERE session_id=?`;
+            const query2 = `DELETE FROM sessions WHERE id=?`;
+
+            this.db.run(query, [id], (err) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    this.db.run(query2, [id], (err) => {
+                        if (err) {
+                            reject(err.message);
+                        } else {
+                            resolve(null);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    incrementPlace(id) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE sessions SET places = places + 1 WHERE id = ? AND places > 0`;
+            this.db.run(query, [id], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else if (this.changes === 0) {
+                    resolve(`Aucune place à augmenter pour l'ID ${id}.`);
+                } else {
+                    resolve(`Une place a été ajouter pour l'ID ${id}.`);
                 }
             });
         });

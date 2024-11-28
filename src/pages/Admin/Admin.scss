@@ -107,6 +107,19 @@
             gap: 10px;
             font-family: Arial, Helvetica, sans-serif;
             background: $white;
+            position: relative;
+
+            .list-seance-box-close {
+                position: absolute;
+                top: 0;
+                right: 0;
+                cursor: pointer;
+                color: $light_red;
+
+                &:hover {
+                    color: $red;
+                }
+            }
 
             .list-sceance-box-participants {
                 display: flex;

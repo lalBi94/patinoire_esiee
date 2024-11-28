@@ -14,7 +14,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import DriveFileRenameOutlineRoundedIcon from "@mui/icons-material/DriveFileRenameOutlineRounded";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Logo from "../../assets/images/favicon.png";
 
 export default function Navbar() {
