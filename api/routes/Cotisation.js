@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const CalendarPieceValidator = require("../class/CalendarPieceValidator");
 const multer = require("multer");
 const upload = multer();
 const express_rateL = require("express-rate-limit");
@@ -8,15 +7,14 @@ const SQLLiteInteractor = require("../class/SQLLiteInteractor");
 const sli_connect = new SQLLiteInteractor("./data/p_e_b.db");
 
 const limiter = express_rateL({
-    windowMs: 30 * 60 * 1000,
+    windowMs: 24 * 60 * 60 * 1000,
     max: 1,
-    message: "Votre appareil a deja emis une demande de cotisation.",
+    message: "Votre appareil a deja emis une demande de cotisation aujourdhui.",
 });
 
 router.get("/", async (req, res) => {
     try {
         const data = await sli_connect.getAskCotisation();
-        console.log(data);
         res.json({ error: null, data });
     } catch (err) {
         console.error(err);
@@ -24,6 +22,7 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.use("/ask", limiter);
 router.post("/ask", upload.none(), async (req, res) => {
     try {
         const { identite, email, tel, promo, questions } = req.body;

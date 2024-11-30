@@ -20,26 +20,11 @@ export default function Footer() {
                             }
                             endDecorator={
                                 <Chip size="sm" variant="solid">
-                                    President
+                                    Support
                                 </Chip>
                             }
                         >
-                            president@patinoir-esiee.fr
-                        </Typography>
-                    </Link>
-
-                    <Link className="footer-data-content">
-                        <Typography
-                            startDecorator={
-                                <AccountCircleIcon fontSize="medium" />
-                            }
-                            endDecorator={
-                                <Chip size="sm" variant="solid">
-                                    Administrateur
-                                </Chip>
-                            }
-                        >
-                            admin@patinoir-esiee.fr
+                            club.patinoire@edu.esiee.fr
                         </Typography>
                     </Link>
 

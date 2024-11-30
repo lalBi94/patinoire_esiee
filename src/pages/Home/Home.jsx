@@ -9,7 +9,7 @@ export default function Home() {
         <Layout>
             <Stack id="home-container">
                 <Stack id="bg">
-                    <Link to="cotiser">
+                    <Link to="/cotiser">
                         <img src={Logo} alt="Logo de la patinoire" />
                     </Link>
                 </Stack>

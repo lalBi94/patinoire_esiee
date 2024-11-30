@@ -1,6 +1,5 @@
 import Layout from "../../layout/Layout";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { format } from "date-fns";
 import "./Admin.scss";
 import { fr } from "date-fns/locale";
@@ -22,9 +21,22 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import InfoIcon from "@mui/icons-material/Info";
 import EmailIcon from "@mui/icons-material/Email";
+import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
+import {
+    deleteSceance,
+    deleteSomeone,
+    submitRegCotisant,
+    getCotisant,
+    getAskCotisant,
+    addSceance,
+    getSceance,
+    refuseSomeone,
+    acceptSomeone,
+} from "../../services/admin.js";
 
 export default function Admin() {
+    const navigate = useNavigate();
     const [sceances, setSceances] = useState([]);
     const [date, setDate] = useState(null);
     const [places, setPlaces] = useState(10);
@@ -40,42 +52,17 @@ export default function Admin() {
     const [regCotisantTel, setRegCotisantTel] = useState("");
 
     const handleDeleteSeance = async (id_sceance) => {
-        const formData = new FormData();
-        formData.append("id", id_sceance);
+        const res = await deleteSceance(id_sceance);
 
-        const req = await axios.post(
-            "http://localhost:5002/calendar/deleteSceance",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            }
-        );
-
-        if (!req.data.error) {
+        if (!res.error) {
             window.location.reload();
         }
     };
 
     const handleDeleteSomeone = async (id_bro, id_sceance) => {
-        const formData = new FormData();
-        formData.append("id_bro", id_bro);
-        formData.append("id_sceance", id_sceance);
+        const res = await deleteSomeone(id_bro, id_sceance);
 
-        const req = await axios.post(
-            "http://localhost:5002/participant/removeParticipant",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            }
-        );
-
-        if (!req.data.error) {
+        if (!res.error) {
             window.location.reload();
         }
     };
@@ -83,36 +70,16 @@ export default function Admin() {
     const handleSubmitRegCotisant = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("identite", regCotisantIdentite);
-        formData.append("promo", regCotisantPromo);
-        formData.append("email", regCotisantEmail);
-        formData.append("tel", regCotisantTel);
-
-        const req = await axios.post(
-            "http://localhost:5002/cotisation/addCotisant",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            }
+        const res = submitRegCotisant(
+            regCotisantIdentite,
+            regCotisantPromo,
+            regCotisantEmail,
+            regCotisantTel
         );
 
-        if (!req.data.error) {
+        if (!res.error) {
             window.location.reload();
         }
-
-        console.log(
-            {
-                regCotisantIdentite,
-                regCotisantPromo,
-                regCotisantEmail,
-                regCotisantTel,
-            },
-            req.data
-        );
     };
 
     const handleRegCotisantIdentite = (e) => {
@@ -131,13 +98,9 @@ export default function Admin() {
         setRegCotisantTel(e.target.value);
     };
 
-    const getCotisant = async () => {
-        const req = await axios.get(
-            "http://localhost:5002/cotisation/retreiveCotisant/"
-        );
-
-        setCotisant(req.data.data);
-        console.log(req.data.data);
+    const handleGetCotisant = async () => {
+        const res = await getCotisant();
+        setCotisant(res.data);
     };
 
     const handleDate = (e) => {
@@ -149,68 +112,25 @@ export default function Admin() {
     };
 
     const handleGetAskCotisation = async () => {
-        const req = await axios.get("http://localhost:5002/cotisation/");
-        setAskCotisation(req.data.data);
+        const res = await getAskCotisant();
+        setAskCotisation(res.data);
     };
 
     const handleAddSceance = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("date", date);
-        formData.append("places", places);
 
-        const req = await axios.post(
-            "http://localhost:5002/calendar/addSceance",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            }
-        );
+        const res = await addSceance(date, places);
 
-        if (!req.data.error) {
+        if (!res.error) {
             setSceances([
                 ...sceances,
                 { date, places, id: "NEW", participants: [] },
             ]);
         }
-
-        console.log(places, new Date(date));
-        console.log(req.data);
     };
 
-    const getSceanceDebug = async () => {
-        const req = await axios.get("http://localhost:5002/calendar");
-
-        for (let e in req.data.data) {
-            const formData = new FormData();
-            formData.append("id", req.data.data[e].id);
-
-            const data = await axios.post(
-                "http://localhost:5002/participant/participantBySeance",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                    data: formData,
-                }
-            );
-            console.log(data.data.data);
-            req.data.data[e] = {
-                ...req.data.data[e],
-                participants: data.data.data,
-            };
-        }
-
-        return req.data.data;
-    };
-
-    const refreshSceances = () => {
-        getSceanceDebug().then((res) => {
-            console.log(res);
+    const refreshSceances = async () => {
+        await getSceance().then((res) => {
             setSceances(res);
         });
     };
@@ -236,66 +156,69 @@ export default function Admin() {
     };
 
     const handleRefuseSomeone = async () => {
-        // TODO: BUG
-        //requete refuse
-        //handleCloseModalAskCotisant();
-        const formData = new FormData();
-        formData.append("id", currentAskCotisant.id);
+        const req = await refuseSomeone(currentAskCotisant.id);
 
-        const req = await axios.post(
-            "http://localhost:5002/cotisation/removeAskCotisation",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            }
-        );
-
-        if (!req.data.error) {
+        if (!req.error) {
             window.location.reload();
         }
     };
 
     const handleAcceptSomeone = async () => {
-        // TODO: BUG
-        //requete accept
-        //handleCloseModalAskCotisant();
-        const formData = new FormData();
-        formData.append("id", currentAskCotisant.id);
-        formData.append("identite", currentAskCotisant.identite);
-        formData.append("email", currentAskCotisant.email);
-        formData.append("tel", currentAskCotisant.tel);
-        formData.append("promo", currentAskCotisant.promo);
-        formData.append(
-            "questions",
-            JSON.stringify({
-                cgu: currentAskCotisant.cgu,
-                knowledge: currentAskCotisant.knowledge,
-                club_rules: currentAskCotisant.club_rules,
-            })
+        const res = acceptSomeone(
+            currentAskCotisant.id,
+            currentAskCotisant.identite,
+            currentAskCotisant.email,
+            currentAskCotisant.tel,
+            currentAskCotisant.promo,
+            currentAskCotisant.cgu,
+            currentAskCotisant.knowledge,
+            currentAskCotisant.club_rules
         );
 
-        const req = await axios.post(
-            "http://localhost:5002/cotisation/addCotisant",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            }
-        );
-
-        if (!req.data.error) {
+        if (!res.error) {
             window.location.reload();
         }
     };
 
+    const setCookie = (name, value, days) => {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Expiration dans `days` jours
+        const expires = `expires=${date.toUTCString()}`;
+        document.cookie = `${name}=${value}; ${expires}; path=/`;
+    };
+
+    const getCookie = (name) => {
+        const nameEQ = `${name}=`;
+        const cookies = document.cookie.split("; ");
+        for (let i = 0; i < cookies.length; i++) {
+            if (cookies[i].startsWith(nameEQ)) {
+                return cookies[i].substring(nameEQ.length);
+            }
+        }
+        return null;
+    };
+
     useEffect(() => {
+        if (
+            getCookie(import.meta.env.VITE_A_NAME) !==
+            import.meta.env.VITE_PASSW_A
+        ) {
+            let first = prompt("Premiere verification...");
+            let second = prompt("Deuxieme verification...");
+
+            if (first !== "1" && second !== "2") {
+                navigate("/");
+            } else {
+                setCookie(
+                    import.meta.env.VITE_A_NAME,
+                    import.meta.env.VITE_PASSW_A,
+                    1
+                );
+            }
+        }
+
         refreshSceances();
-        getCotisant();
+        handleGetCotisant();
         handleGetAskCotisation();
     }, []);
 
@@ -416,7 +339,7 @@ export default function Admin() {
                     Actions
                 </Typography>
 
-                <Stack gap={3} display={"flex"} flexDirection={"row"}>
+                <Stack id="sections-container">
                     <Stack className="section">
                         <h3>Ajouter une sceance</h3>
 
@@ -424,28 +347,30 @@ export default function Admin() {
                             onSubmit={handleAddSceance}
                             className="section-in-section"
                         >
-                            <FormControl>
-                                <FormLabel>Date</FormLabel>
-                                <Input
-                                    className="section-in-section-ipt"
-                                    type="datetime-local"
-                                    onChange={handleDate}
-                                    required
-                                />
-                            </FormControl>
+                            <Stack className="section-ipt-group">
+                                <FormControl>
+                                    <FormLabel>Date</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        type="datetime-local"
+                                        onChange={handleDate}
+                                        required
+                                    />
+                                </FormControl>
 
-                            <FormControl>
-                                <FormLabel>Nombre de place</FormLabel>
-                                <Input
-                                    className="section-in-section-ipt"
-                                    placeholder="ex: 10"
-                                    defaultValue={10}
-                                    onChange={handlePlaces}
-                                    type="number"
-                                    value={places}
-                                    required
-                                />
-                            </FormControl>
+                                <FormControl>
+                                    <FormLabel>Nombre de place</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        placeholder="ex: 10"
+                                        defaultValue={10}
+                                        onChange={handlePlaces}
+                                        type="number"
+                                        value={places}
+                                        required
+                                    />
+                                </FormControl>
+                            </Stack>
 
                             <Button
                                 type="submit"
@@ -463,53 +388,55 @@ export default function Admin() {
                             onSubmit={handleSubmitRegCotisant}
                             className="section-in-section"
                         >
-                            <FormControl>
-                                <FormLabel>Nom & Prenom</FormLabel>
-                                <Input
-                                    className="section-in-section-ipt"
-                                    type="texte"
-                                    placeholder="Ex: Jean Paul"
-                                    onChange={handleRegCotisantIdentite}
-                                    value={regCotisantIdentite}
-                                    required
-                                />
-                            </FormControl>
+                            <Stack className="section-ipt-group">
+                                <FormControl>
+                                    <FormLabel>Nom & Prenom</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        type="texte"
+                                        placeholder="Ex: Jean Paul"
+                                        onChange={handleRegCotisantIdentite}
+                                        value={regCotisantIdentite}
+                                        required
+                                    />
+                                </FormControl>
 
-                            <FormControl>
-                                <FormLabel>Email</FormLabel>
-                                <Input
-                                    className="section-in-section-ipt"
-                                    placeholder="ex: abc@def.gh"
-                                    onChange={handleRegCotisantEmail}
-                                    type="email"
-                                    value={regCotisantEmail}
-                                    required
-                                />
-                            </FormControl>
+                                <FormControl>
+                                    <FormLabel>Email</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        placeholder="ex: abc@def.gh"
+                                        onChange={handleRegCotisantEmail}
+                                        type="email"
+                                        value={regCotisantEmail}
+                                        required
+                                    />
+                                </FormControl>
 
-                            <FormControl>
-                                <FormLabel>Numéro de télephone</FormLabel>
-                                <Input
-                                    className="section-in-section-ipt"
-                                    placeholder="ex: 0670504937"
-                                    onChange={handleRegCotisantTel}
-                                    type="tel"
-                                    value={regCotisantTel}
-                                    required
-                                />
-                            </FormControl>
+                                <FormControl>
+                                    <FormLabel>Numéro de télephone</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        placeholder="ex: 0670504937"
+                                        onChange={handleRegCotisantTel}
+                                        type="tel"
+                                        value={regCotisantTel}
+                                        required
+                                    />
+                                </FormControl>
 
-                            <FormControl>
-                                <FormLabel>Promo</FormLabel>
-                                <Input
-                                    className="section-in-section-ipt"
-                                    placeholder="ex: E3T"
-                                    onChange={handleRegCotisantPromo}
-                                    type="text"
-                                    value={regCotisantPromo}
-                                    required
-                                />
-                            </FormControl>
+                                <FormControl>
+                                    <FormLabel>Promo</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        placeholder="ex: E3T"
+                                        onChange={handleRegCotisantPromo}
+                                        type="text"
+                                        value={regCotisantPromo}
+                                        required
+                                    />
+                                </FormControl>
+                            </Stack>
 
                             <Button
                                 type="submit"
@@ -518,6 +445,54 @@ export default function Admin() {
                                 Créer
                             </Button>
                         </form>
+                    </Stack>
+
+                    <Stack id="not-work" className="section">
+                        <h3>Modifier les tarifs</h3>
+
+                        <form onSubmit={null} className="section-in-section">
+                            <Stack className="section-ipt-group">
+                                <FormControl>
+                                    <FormLabel>Cotisant du club</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        type="text"
+                                        onChange={null}
+                                        placeholder="Actuel: 8.75€"
+                                        required
+                                    />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel>Non-Cotisant</FormLabel>
+                                    <Input
+                                        className="section-in-section-ipt"
+                                        type="text"
+                                        onChange={null}
+                                        placeholder="Actuel: 9.75€"
+                                        required
+                                    />
+                                </FormControl>
+                            </Stack>
+
+                            <Button
+                                type="submit"
+                                className="section-in-section-btn"
+                            >
+                                Valider
+                            </Button>
+                        </form>
+                    </Stack>
+
+                    <Stack id="not-work" className="section">
+                        <h3>Recuperer la liste des cotisants</h3>
+
+                        <Button
+                            type="submit"
+                            className="section-in-section-btn"
+                        >
+                            Telecharger
+                        </Button>
                     </Stack>
                 </Stack>
 

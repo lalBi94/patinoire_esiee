@@ -25,8 +25,8 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import { fr } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { getSeance, sendReservation } from "../../services/seance";
 
 const locales = {
     fr: fr,
@@ -68,17 +68,14 @@ export default function Seance() {
     const saveDate = (date) => {
         setDateChooseTimestamp(date);
         setDateChoose(format(date, "EEEE dd MMMM yyyy", { locale: fr }));
-        console.log(format(date, "EEEE dd MMMM yyyy", { locale: fr }));
     };
 
-    const getSeance = async () => {
-        const req = await axios.get("http://localhost:5002/calendar");
+    const handleGetSeance = async () => {
+        const res = await getSeance();
 
-        console.log(req.data);
-
-        const data = req.data.data.map((e) => ({
+        const data = res.data.map((e, k) => ({
             title: (
-                <Stack className="seance-card">
+                <Stack key={k} className="seance-card">
                     <Typography>
                         <b>Places: {e.places}</b>
                     </Typography>
@@ -98,13 +95,11 @@ export default function Seance() {
             allDay: true,
         }));
 
-        console.log(data);
-
         return data;
     };
 
     useEffect(() => {
-        getSeance().then((res) => {
+        handleGetSeance().then((res) => {
             setSeances(res);
         });
     }, []);
@@ -133,33 +128,25 @@ export default function Seance() {
         setReservationNonOk(!reservationNonOk);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setInLoadingReservation(true);
 
-        const formData = new FormData();
-        formData.append("identity", identity);
-        formData.append("cotisantOf", cotisantOf);
-        formData.append("email", email);
-        formData.append("tel", tel);
-        formData.append("sceance_id", idChoosen);
+        const res = await sendReservation(
+            identity,
+            cotisantOf,
+            email,
+            tel,
+            idChoosen
+        );
 
-        axios
-            .post("http://localhost:5002/calendar/take", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                data: formData,
-            })
-            .then((res) => {
-                setInLoadingReservation(false);
+        setInLoadingReservation(false);
 
-                if (!res.data.error) {
-                    handleReservationOk();
-                } else {
-                    handleReservationNonOk();
-                }
-            });
+        if (!res || res.error) {
+            handleReservationNonOk();
+        } else {
+            handleReservationOk();
+        }
     };
 
     const handleOnCloseModal = () => {
@@ -307,9 +294,9 @@ export default function Seance() {
                             Nous vous invitons à effectuer le paiement via{" "}
                             <Link to="https://www.lydia.me/">Lydia</Link> selon
                             votre statut de cotisant. Si vous êtes cotisant, le
-                            montant est de <b>8,75€</b>, sinon il s'élève à{" "}
+                            montant est de <b>8,75€</b>, sinon il s&apos;élève à{" "}
                             <b>9,75€</b>. Votre inscription ne sera validée
-                            qu'après réception du paiement.
+                            qu&apos;après réception du paiement.
                         </Typography>
 
                         <Typography color="danger">

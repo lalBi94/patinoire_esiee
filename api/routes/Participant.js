@@ -10,7 +10,6 @@ router.post("/participantBySeance", upload.none(), async (req, res) => {
     try {
         const { id } = req.body;
         const data = await sli_connect.getParticipantsBySessionId(id);
-        console.log(data, id);
         res.json({ error: null, data });
     } catch (err) {
         console.error(err);

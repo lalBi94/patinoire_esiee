@@ -323,7 +323,6 @@ class SQLLiteInteractor {
     }
 
     incrementPlace(id) {
-        console.log("id du incerement : " + id);
         return new Promise((resolve, reject) => {
             const query = `UPDATE sessions SET places = places + 1 WHERE id = ? AND places > 0`;
             this.db.run(query, [id], function (err) {
@@ -344,9 +343,6 @@ class SQLLiteInteractor {
                 if (err) {
                     reject(err.message);
                 } else {
-                    console.log(
-                        "Connexion à la base de données SQLite fermée."
-                    );
                     resolve();
                 }
             });

@@ -75,7 +75,7 @@ export default function Navbar() {
                     <Box className="nav-links-content">
                         <Link
                             target="_blank"
-                            to="https://www.instagram.com/club_patinoire_en_cours?igsh=MWxwb25qZjV5cm1pdg=="
+                            to="https://www.instagram.com/club_patinoire_esiee/?igsh=emxwOXJ0MDNqdTlz#"
                             className="nav-links"
                         >
                             <InstagramIcon className="nav-links-icons" />
@@ -134,7 +134,7 @@ export default function Navbar() {
                 <Box className="nav-links-content">
                     <Link
                         target="_blank"
-                        to="https://www.instagram.com/club_patinoire_en_cours?igsh=MWxwb25qZjV5cm1pdg=="
+                        to="https://www.instagram.com/club_patinoire_esiee/?igsh=emxwOXJ0MDNqdTlz#"
                         className="nav-links"
                     >
                         <InstagramIcon className="nav-links-icons" />
