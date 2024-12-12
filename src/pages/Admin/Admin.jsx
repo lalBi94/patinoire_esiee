@@ -206,7 +206,10 @@ export default function Admin() {
             let first = prompt("Premiere verification...");
             let second = prompt("Deuxieme verification...");
 
-            if (first !== "1" && second !== "2") {
+            if (
+                first !== import.meta.env.VITE_A_NAME &&
+                second !== import.meta.env.VITE_PASSW_A
+            ) {
                 navigate("/");
             } else {
                 setCookie(
